@@ -6,12 +6,26 @@
     <title>Plaza Vieja | Tu Tienda a Domicilio en La Habana</title>
     <meta name="description" content="Encuentra embutidos, quesos y más en Plaza Vieja. Haz tu pedido online y recíbelo en La Habana.">
     
-    <!-- Fuente -->
+    <!-- ============================================
+    PWA - MANIFEST Y CONFIGURACIÓN
+    ============================================ -->
+    <link rel="manifest" href="/plaza-vieja/manifest.json">
+    <meta name="theme-color" content="#0d3b33">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Plaza Vieja">
+    
+    <!-- Iconos para la app -->
+    <link rel="icon" type="image/png" sizes="192x192" href="productos/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="productos/icon-512x512.png">
+    <link rel="apple-touch-icon" href="productos/icon-192x192.png">
+    
+    <!-- ============================================
+    FUENTES Y ESTILOS
+    ============================================ -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -43,6 +57,12 @@
             background: var(--bg);
             color: var(--text-dark);
             padding-bottom: 80px;
+        }
+        
+        /* Cuando la app está instalada */
+        body.app-installed {
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
         }
         
         .container {
@@ -122,7 +142,7 @@
         @media (min-width: 768px) { .menu-btn { display: none; } }
         
         /* ============================================
-           HERO - NUEVO TEXTO
+           HERO
            ============================================ */
         .hero {
             min-height: 400px;
@@ -231,7 +251,7 @@
         }
         
         /* ============================================
-           CATEGORÍAS RÁPIDAS (NUEVO)
+           CATEGORÍAS RÁPIDAS
            ============================================ */
         .quick-categories {
             display: flex;
@@ -314,7 +334,7 @@
         }
         
         /* ============================================
-           SPINNER DE CARGA (NUEVO)
+           SPINNER DE CARGA
            ============================================ */
         @keyframes spin { to { transform: rotate(360deg); } }
         .spinner-container {
@@ -382,7 +402,6 @@
         }
         .product-card:hover .img-wrap img { transform: scale(1.05); }
         
-        /* Etiqueta de oferta (NUEVO) */
         .product-tag {
             position: absolute;
             top: 8px;
@@ -493,7 +512,7 @@
         .cart-float .total { font-weight: 700; font-size: 1rem; }
         
         /* ============================================
-           BOTÓN VOLVER ARRIBA (NUEVO)
+           BOTÓN VOLVER ARRIBA
            ============================================ */
         #backToTop {
             position: fixed;
@@ -525,6 +544,73 @@
                 height: 40px;
                 font-size: 18px;
             }
+        }
+        
+        /* ============================================
+           BANNER DE INSTALACIÓN DE APP (PWA)
+           ============================================ */
+        #installBanner {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 16px;
+            z-index: 9998;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+            max-width: 90%;
+            width: 400px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            animation: slideUp 0.5s ease;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(30px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        #installBanner .close-banner {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.6);
+            font-size: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        #installBanner .close-banner:hover { color: white; }
+        #installBanner .banner-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+        #installBanner h4 {
+            font-size: 1.0625rem;
+            margin-bottom: 4px;
+        }
+        #installBanner p {
+            font-size: 0.8125rem;
+            opacity: 0.8;
+            margin-bottom: 12px;
+        }
+        #installBanner .btn-install {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 32px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9375rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        #installBanner .btn-install:hover {
+            transform: scale(1.05);
+            background: var(--accent-light);
         }
         
         /* ============================================
@@ -761,7 +847,7 @@
         ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
         
         /* ============================================
-           RESPONSIVE PARA CELULARES
+           RESPONSIVE
            ============================================ */
         @media (max-width: 480px) {
             .hero h1 { font-size: 1.8rem; }
@@ -771,12 +857,11 @@
             .product-card .img-wrap { height: 140px; }
             .product-card .info h3 { font-size: 0.85rem; }
             .product-card .info .price { font-size: 1rem; }
-            .product-card .info .btn-detail { 
-                padding: 12px;
-                font-size: 0.85rem;
-            }
+            .product-card .info .btn-detail { padding: 12px; font-size: 0.85rem; }
             .modal-box { padding: 16px; }
             .modal-box h2 { font-size: 1.25rem; }
+            #installBanner { bottom: 100px; padding: 14px 16px; }
+            #installBanner h4 { font-size: 0.95rem; }
         }
     </style>
 </head>
@@ -802,7 +887,7 @@ HEADER
 </header>
 
 <!-- ============================================
-HERO - NUEVO TEXTO
+HERO
 ============================================ -->
 <section class="hero">
     <div class="hero-content">
@@ -856,7 +941,6 @@ MERCADO / PRODUCTOS
             <input type="text" id="searchInput" placeholder="Buscar productos..." oninput="filterProducts()">
         </div>
         
-        <!-- CATEGORÍAS RÁPIDAS (NUEVO) -->
         <div class="quick-categories" id="quickCategories"></div>
         
         <div class="filters" id="filterContainer">
@@ -864,7 +948,6 @@ MERCADO / PRODUCTOS
         </div>
         
         <div class="products-grid" id="productGrid">
-            <!-- Spinner de carga (NUEVO) -->
             <div class="spinner-container" id="loadingSpinner">
                 <div class="spinner"></div>
                 <p>Cargando productos...</p>
@@ -914,6 +997,19 @@ FOOTER
 </footer>
 
 <!-- ============================================
+BANNER DE INSTALACIÓN DE APP (PWA)
+============================================ -->
+<div id="installBanner">
+    <button class="close-banner" onclick="document.getElementById('installBanner').style.display='none'">&times;</button>
+    <div class="banner-icon">📱</div>
+    <h4>¡Instala Plaza Vieja como App!</h4>
+    <p>Disfruta de una experiencia más rápida, sin conexión y con acceso directo desde tu pantalla de inicio.</p>
+    <button class="btn-install" id="installAppBtn">
+        <i class="fas fa-download"></i> Instalar App
+    </button>
+</div>
+
+<!-- ============================================
 MODAL DE PRODUCTO
 ============================================ -->
 <div class="modal-overlay" id="productModal">
@@ -960,16 +1056,86 @@ CARRITO FLOTANTE
 </button>
 
 <!-- ============================================
-BOTÓN VOLVER ARRIBA (NUEVO)
+BOTÓN VOLVER ARRIBA
 ============================================ -->
 <button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
     <i class="fas fa-arrow-up"></i>
 </button>
 
 <!-- ============================================
-SCRIPT
+SCRIPT - CON REGISTRO DE SERVICE WORKER
 ============================================ -->
 <script src="script.js"></script>
+
+<script>
+// ================================================================
+// REGISTRO DEL SERVICE WORKER (PWA)
+// ================================================================
+
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/plaza-vieja/sw.js')
+            .then(function(registration) {
+                console.log('✅ Service Worker registrado con éxito:', registration.scope);
+            })
+            .catch(function(error) {
+                console.log('❌ Error al registrar Service Worker:', error);
+            });
+    });
+}
+
+// ================================================================
+// DETECTAR SI LA APP ESTÁ INSTALADA
+// ================================================================
+
+if (window.matchMedia('(display-mode: standalone)').matches) {
+    document.body.classList.add('app-installed');
+    console.log('📱 App instalada y ejecutándose en modo standalone');
+}
+
+// ================================================================
+// BANNER DE INSTALACIÓN
+// ================================================================
+
+var deferredPrompt;
+var installBanner = document.getElementById('installBanner');
+
+window.addEventListener('beforeinstallprompt', function(e) {
+    e.preventDefault();
+    deferredPrompt = e;
+    installBanner.style.display = 'block';
+    console.log('📲 Evento beforeinstallprompt detectado');
+});
+
+document.getElementById('installAppBtn').addEventListener('click', function() {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(function(choiceResult) {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('✅ Usuario aceptó instalar la app');
+                installBanner.style.display = 'none';
+            } else {
+                console.log('❌ Usuario rechazó instalar la app');
+            }
+            deferredPrompt = null;
+        });
+    }
+});
+
+// Si la app ya está instalada, ocultar banner
+if (window.matchMedia('(display-mode: standalone)').matches) {
+    installBanner.style.display = 'none';
+}
+
+// ================================================================
+// DETECTAR CUANDO LA APP SE INSTALA DESDE EL BANNER
+// ================================================================
+
+window.addEventListener('appinstalled', function() {
+    console.log('✅ App instalada correctamente');
+    installBanner.style.display = 'none';
+});
+</script>
 
 </body>
 </html>
