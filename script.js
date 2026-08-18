@@ -6,13 +6,11 @@
 // 1. CATÁLOGO DE PRODUCTOS
 // ================================================================
 
-// Función para extraer precio del nombre del archivo
 function extractPrice(filename) {
     var match = filename.match(/(\d+)(?=\.\w+$)/);
     return match ? parseInt(match[1]) : 0;
 }
 
-// Función para extraer peso del nombre del archivo
 function extractWeight(filename) {
     var match = filename.match(/(\d+[,.]?\d*)\s*kilos?/i);
     if (match) return parseFloat(match[1].replace(',', '.'));
@@ -23,7 +21,6 @@ function extractWeight(filename) {
     return null;
 }
 
-// Productos
 var products = [
     // === EMBUTIDOS ===
     { id: 101, name: "Chorizo Extra Vela", image: "productos/Chorizo extra vela 1.6 kilos 17000.png", desc: "Chorizo extra vela de alta calidad, sabor intenso y ahumado.", category: "Embutidos" },
@@ -44,7 +41,7 @@ var products = [
     { id: 304, name: "Queso de Cabra con Miel", image: "productos/Queso de cabra valle de San Juan con crema de miel 3.5 kilos 25000.png", desc: "Exquisito queso de cabra del Valle de San Juan con miel.", category: "Quesos" }
 ];
 
-// Procesar productos: extraer precio y peso
+// Procesar productos
 products = products.map(function(p) {
     p.price = extractPrice(p.image);
     var w = extractWeight(p.image);
@@ -53,7 +50,7 @@ products = products.map(function(p) {
     return p;
 });
 
-// Ordenar por categoría
+// Ordenar
 products.sort(function(a, b) {
     if (a.category < b.category) return -1;
     if (a.category > b.category) return 1;
@@ -105,15 +102,22 @@ function updateQty(index, newQty) {
 function updateUI() {
     var count = getCount();
     var total = getTotal();
-    document.getElementById('cartBadge').textContent = count;
-    document.getElementById('cartFloatTotal').textContent = '$' + total.toLocaleString();
+    
+    var badge = document.getElementById('cartBadge');
+    var floatTotal = document.getElementById('cartFloatTotal');
+    if (badge) badge.textContent = count;
+    if (floatTotal) floatTotal.textContent = '$' + total.toLocaleString();
     
     var container = document.getElementById('cartItems');
     var sendBtn = document.getElementById('sendWhatsAppBtn');
+    var totalDisplay = document.getElementById('cartTotalDisplay');
+    
+    if (!container) return;
     
     if (cart.length === 0) {
         container.innerHTML = '<p style="text-align:center;color:var(--text-medium);">Tu carrito está vacío</p>';
-        sendBtn.disabled = true;
+        if (sendBtn) sendBtn.disabled = true;
+        if (totalDisplay) totalDisplay.textContent = 'Total: $0';
         return;
     }
     
@@ -129,8 +133,8 @@ function updateUI() {
         '</div>';
     }).join('');
     
-    document.getElementById('cartTotalDisplay').textContent = 'Total: $' + total.toLocaleString();
-    sendBtn.disabled = false;
+    if (totalDisplay) totalDisplay.textContent = 'Total: $' + total.toLocaleString();
+    if (sendBtn) sendBtn.disabled = false;
 }
 
 // ================================================================
@@ -143,22 +147,25 @@ var currentQty = 1;
 
 function renderProducts() {
     var grid = document.getElementById('productGrid');
-    var search = document.getElementById('searchInput').value.toLowerCase();
+    var search = document.getElementById('searchInput');
+    var searchTerm = search ? search.value.toLowerCase() : '';
     
     var filtered = products.filter(function(p) {
         var catMatch = currentCategory === 'all' || p.category === currentCategory;
-        var searchMatch = !search || p.name.toLowerCase().includes(search) || p.desc.toLowerCase().includes(search);
+        var searchMatch = !searchTerm || p.name.toLowerCase().includes(searchTerm) || p.desc.toLowerCase().includes(searchTerm);
         return catMatch && searchMatch;
     });
     
+    var noResults = document.getElementById('noResults');
+    if (!grid) return;
+    
     if (filtered.length === 0) {
         grid.innerHTML = '';
-        document.getElementById('noResults').classList.remove('hidden');
+        if (noResults) noResults.classList.remove('hidden');
         return;
     }
-    document.getElementById('noResults').classList.add('hidden');
+    if (noResults) noResults.classList.add('hidden');
     
-    // Agrupar por categoría
     var grouped = {};
     filtered.forEach(function(p) {
         if (!grouped[p.category]) grouped[p.category] = [];
@@ -183,11 +190,6 @@ function renderProducts() {
         });
     });
     grid.innerHTML = html;
-    
-    // Animar elementos
-    document.querySelectorAll('.fade-in').forEach(function(el, i) {
-        setTimeout(function() { el.classList.add('visible'); }, i * 100);
-    });
 }
 
 // ================================================================
@@ -196,7 +198,8 @@ function renderProducts() {
 
 function filterByCategory(cat) {
     currentCategory = cat;
-    document.querySelectorAll('.filter-btn').forEach(function(b) {
+    var btns = document.querySelectorAll('.filter-btn');
+    btns.forEach(function(b) {
         b.classList.toggle('active', b.dataset.category === cat);
     });
     renderProducts();
@@ -215,8 +218,9 @@ function openProductModal(id) {
     if (!currentProduct) return;
     currentQty = 1;
     document.getElementById('modalTitle').textContent = currentProduct.name;
-    document.getElementById('modalImage').src = currentProduct.image;
-    document.getElementById('modalImage').onerror = function() {
+    var img = document.getElementById('modalImage');
+    img.src = currentProduct.image;
+    img.onerror = function() {
         this.src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22%3E%3Crect fill=%22%230d3b33%22 width=%22300%22 height=%22300%22/%3E%3Ctext x=%22150%22 y=%22150%22 text-anchor=%22middle%22 font-family=%22Inter,sans-serif%22 font-size=%2224%22 fill=%22white%22%3E' + encodeURIComponent(currentProduct.name) + '%3C/text%3E%3C/svg%3E';
     };
     document.getElementById('modalDesc').textContent = currentProduct.desc;
@@ -251,7 +255,7 @@ function closeCartModal() {
 }
 
 // ================================================================
-// 6. ENVIAR PEDIDO POR WHATSAPP
+// 6. ENVIAR PEDIDO
 // ================================================================
 
 function sendOrder() {
@@ -278,7 +282,9 @@ var toastTimeout;
 
 function showToast(msg) {
     var el = document.getElementById('toast');
-    document.getElementById('toastMsg').textContent = msg;
+    var msgEl = document.getElementById('toastMsg');
+    if (!el || !msgEl) return;
+    msgEl.textContent = msg;
     el.classList.add('show');
     clearTimeout(toastTimeout);
     toastTimeout = setTimeout(function() { el.classList.remove('show'); }, 2500);
@@ -286,6 +292,7 @@ function showToast(msg) {
 
 function shakeCart() {
     var btn = document.getElementById('cartFloat');
+    if (!btn) return;
     btn.classList.remove('shake');
     void btn.offsetWidth;
     btn.classList.add('shake');
@@ -296,15 +303,17 @@ function shakeCart() {
 // ================================================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Generar filtros de categoría
+    // Generar filtros
     var cats = ['all'];
     products.forEach(function(p) {
         if (cats.indexOf(p.category) === -1) cats.push(p.category);
     });
     var container = document.getElementById('filterContainer');
-    container.innerHTML = cats.map(function(c) {
-        return '<button class="filter-btn' + (c === 'all' ? ' active' : '') + '" data-category="' + c + '" onclick="filterByCategory(\'' + c + '\')">' + (c === 'all' ? 'Todos' : c) + '</button>';
-    }).join('');
+    if (container) {
+        container.innerHTML = cats.map(function(c) {
+            return '<button class="filter-btn' + (c === 'all' ? ' active' : '') + '" data-category="' + c + '" onclick="filterByCategory(\'' + c + '\')">' + (c === 'all' ? 'Todos' : c) + '</button>';
+        }).join('');
+    }
     
     renderProducts();
     updateUI();
@@ -319,10 +328,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Header scroll
     var header = document.getElementById('mainHeader');
     window.addEventListener('scroll', function() {
-        header.classList.toggle('scrolled', window.scrollY > 80);
+        if (header) header.classList.toggle('scrolled', window.scrollY > 80);
     });
     
-    // Intersection Observer para animaciones
+    // Animaciones
     if ('IntersectionObserver' in window) {
         var observer = new IntersectionObserver(function(entries) {
             entries.forEach(function(e) {
