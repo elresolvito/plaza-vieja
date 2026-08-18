@@ -1,5 +1,5 @@
 // ================================================================
-// PLAZA VIEJA - SCRIPT COMPLETO
+// PLAZA VIEJA - SCRIPT COMPLETO MEJORADO
 // ================================================================
 
 // ================================================================
@@ -24,12 +24,12 @@ function extractWeight(filename) {
 var products = [
     // === EMBUTIDOS ===
     { id: 101, name: "Chorizo Extra Vela", image: "productos/Chorizo extra vela 1.6 kilos 17000.png", desc: "Chorizo extra vela de alta calidad, sabor intenso y ahumado.", category: "Embutidos" },
-    { id: 102, name: "Jamón Serrano Deshuesado", image: "productos/Jamón Serrano deshuesado 5 a 5.5 libras 49000.png", desc: "Jamón serrano deshuesado, corte fino y sabor tradicional.", category: "Embutidos" },
+    { id: 102, name: "Jamón Serrano Deshuesado", image: "productos/Jamón Serrano deshuesado 5 a 5.5 libras 49000.png", desc: "Jamón serrano deshuesado, corte fino y sabor tradicional.", category: "Embutidos", tag: "nuevo" },
     { id: 103, name: "Jamón Rápido", image: "productos/Jamón rápido 2 kilos 9000.png", desc: "Jamón rápido, práctico y versátil para el consumo diario.", category: "Embutidos" },
     { id: 104, name: "Jamón Barra", image: "productos/Jamón barra 2 kilos 9000.png", desc: "Jamón en barra, ideal para lonchear y preparar sándwiches.", category: "Embutidos" },
     
     // === BEICONES ===
-    { id: 201, name: "Beicon Laminado 1kg", image: "productos/Beicon laminado 1 kilo 9000.png", desc: "Beicon laminado en finas lonchas, perfecto para desayunos.", category: "Beicones" },
+    { id: 201, name: "Beicon Laminado 1kg", image: "productos/Beicon laminado 1 kilo 9000.png", desc: "Beicon laminado en finas lonchas, perfecto para desayunos.", category: "Beicones", tag: "oferta" },
     { id: 202, name: "Beicon Laminado 2kg", image: "productos/Beicon laminado de 2 kilos 17000.png", desc: "Beicon laminado en lonchas, formato económico.", category: "Beicones" },
     { id: 203, name: "Beicon Troceado Lasqueado", image: "productos/Beicon troceado Lasqueado 3 kilos 17000.png", desc: "Beicon troceado y lasqueado, ideal para guisos.", category: "Beicones" },
     { id: 204, name: "Beicon Molde Natural", image: "productos/Beicon molde natural de 5 kilos 29000.png", desc: "Beicon en molde natural, sabor auténtico.", category: "Beicones" },
@@ -37,8 +37,8 @@ var products = [
     // === QUESOS ===
     { id: 301, name: "Queso Gouda Alemán", image: "productos/Gouda alemán 3,1 kilos 20500.png", desc: "Queso Gouda alemán, cremoso y con sabor intenso.", category: "Quesos" },
     { id: 302, name: "Queso Gouda Holandés", image: "productos/Gouda holandés 3,1 kilos 21500.png", desc: "Queso Gouda holandés, aroma y sabor inconfundibles.", category: "Quesos" },
-    { id: 303, name: "Queso Azul", image: "productos/Queso azul 3 kilos 31000.png", desc: "Queso azul de sabor fuerte y con carácter.", category: "Quesos" },
-    { id: 304, name: "Queso de Cabra con Miel", image: "productos/Queso de cabra valle de San Juan con crema de miel 3.5 kilos 25000.png", desc: "Exquisito queso de cabra del Valle de San Juan con miel.", category: "Quesos" }
+    { id: 303, name: "Queso Azul", image: "productos/Queso azul 3 kilos 31000.png", desc: "Queso azul de sabor fuerte y con carácter.", category: "Quesos", tag: "nuevo" },
+    { id: 304, name: "Queso de Cabra con Miel", image: "productos/Queso de cabra valle de San Juan con crema de miel 3.5 kilos 25000.png", desc: "Exquisito queso de cabra del Valle de San Juan con miel.", category: "Quesos", tag: "oferta" }
 ];
 
 // Procesar productos
@@ -58,13 +58,31 @@ products.sort(function(a, b) {
 });
 
 // ================================================================
-// 2. CARRITO
+// 2. CARRITO CON PERSISTENCIA
 // ================================================================
 
-var cart = JSON.parse(localStorage.getItem('plazaCart')) || [];
+// Cargar carrito con expiración (7 días)
+function loadCart() {
+    var data = localStorage.getItem('plazaCart');
+    if (data) {
+        try {
+            var parsed = JSON.parse(data);
+            // Verificar expiración
+            if (parsed.expires && parsed.expires > Date.now()) {
+                return parsed.items || [];
+            }
+        } catch (e) {}
+    }
+    return [];
+}
+
+var cart = loadCart();
 
 function saveCart() {
-    localStorage.setItem('plazaCart', JSON.stringify(cart));
+    localStorage.setItem('plazaCart', JSON.stringify({
+        items: cart,
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000 // 7 días
+    }));
     updateUI();
 }
 
@@ -138,7 +156,7 @@ function updateUI() {
 }
 
 // ================================================================
-// 3. RENDERIZAR PRODUCTOS
+// 3. RENDERIZAR PRODUCTOS CON SPINNER Y ETIQUETAS
 // ================================================================
 
 var currentCategory = 'all';
@@ -149,6 +167,10 @@ function renderProducts() {
     var grid = document.getElementById('productGrid');
     var search = document.getElementById('searchInput');
     var searchTerm = search ? search.value.toLowerCase() : '';
+    
+    // Ocultar spinner
+    var spinner = document.getElementById('loadingSpinner');
+    if (spinner) spinner.style.display = 'none';
     
     var filtered = products.filter(function(p) {
         var catMatch = currentCategory === 'all' || p.category === currentCategory;
@@ -177,8 +199,19 @@ function renderProducts() {
     cats.forEach(function(cat) {
         html += '<div style="grid-column:1/-1;text-align:center;padding:16px 0 8px;"><h3 style="font-size:1.25rem;font-weight:800;color:var(--primary);border-bottom:2px solid #e5e7eb;padding-bottom:8px;display:inline-block;">— ' + cat + ' —</h3></div>';
         grouped[cat].forEach(function(p) {
+            // Etiqueta de oferta/nuevo
+            var tagHtml = '';
+            if (p.tag === 'oferta') {
+                tagHtml = '<span class="product-tag">Oferta</span>';
+            } else if (p.tag === 'nuevo') {
+                tagHtml = '<span class="product-tag new">Nuevo</span>';
+            }
+            
             html += '<div class="product-card" onclick="openProductModal(' + p.id + ')">' +
-                '<div class="img-wrap"><img src="' + p.image + '" alt="' + p.name + '" loading="lazy" onerror="this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22%3E%3Crect fill=%22%230d3b33%22 width=%22300%22 height=%22300%22/%3E%3Ctext x=%22150%22 y=%22150%22 text-anchor=%22middle%22 font-family=%22Inter,sans-serif%22 font-size=%2220%22 fill=%22white%22%3E' + encodeURIComponent(p.name) + '%3C/text%3E%3C/svg%3E\'"></div>' +
+                '<div class="img-wrap">' +
+                    tagHtml +
+                    '<img src="' + p.image + '" alt="' + p.name + '" loading="lazy" onerror="this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22%3E%3Crect fill=%22%230d3b33%22 width=%22300%22 height=%22300%22/%3E%3Ctext x=%22150%22 y=%22150%22 text-anchor=%22middle%22 font-family=%22Inter,sans-serif%22 font-size=%2220%22 fill=%22white%22%3E' + encodeURIComponent(p.name) + '%3C/text%3E%3C/svg%3E\'">' +
+                '</div>' +
                 '<div class="info">' +
                     '<h3>' + p.name + '</h3>' +
                     (p.detail ? '<span class="detail">' + p.detail + '</span>' : '') +
@@ -193,15 +226,43 @@ function renderProducts() {
 }
 
 // ================================================================
-// 4. FILTROS
+// 4. CATEGORÍAS RÁPIDAS (NUEVO)
+// ================================================================
+
+function renderQuickCategories() {
+    var container = document.getElementById('quickCategories');
+    if (!container) return;
+    
+    var cats = ['all'];
+    products.forEach(function(p) {
+        if (cats.indexOf(p.category) === -1) cats.push(p.category);
+    });
+    
+    container.innerHTML = cats.map(function(c) {
+        var label = c === 'all' ? 'Todos' : c;
+        return '<button class="quick-cat-btn' + (c === 'all' ? ' active' : '') + '" data-category="' + c + '" onclick="filterByCategory(\'' + c + '\')">' + label + '</button>';
+    }).join('');
+}
+
+// ================================================================
+// 5. FILTROS
 // ================================================================
 
 function filterByCategory(cat) {
     currentCategory = cat;
+    
+    // Actualizar botones de filtros
     var btns = document.querySelectorAll('.filter-btn');
     btns.forEach(function(b) {
         b.classList.toggle('active', b.dataset.category === cat);
     });
+    
+    // Actualizar categorías rápidas
+    var quickBtns = document.querySelectorAll('.quick-cat-btn');
+    quickBtns.forEach(function(b) {
+        b.classList.toggle('active', b.dataset.category === cat);
+    });
+    
     renderProducts();
 }
 
@@ -210,7 +271,7 @@ function filterProducts() {
 }
 
 // ================================================================
-// 5. MODALES
+// 6. MODALES
 // ================================================================
 
 function openProductModal(id) {
@@ -224,7 +285,7 @@ function openProductModal(id) {
         this.src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22%3E%3Crect fill=%22%230d3b33%22 width=%22300%22 height=%22300%22/%3E%3Ctext x=%22150%22 y=%22150%22 text-anchor=%22middle%22 font-family=%22Inter,sans-serif%22 font-size=%2224%22 fill=%22white%22%3E' + encodeURIComponent(currentProduct.name) + '%3C/text%3E%3C/svg%3E';
     };
     document.getElementById('modalDesc').textContent = currentProduct.desc;
-    document.getElementById('modalPrice').textContent = '$' + currentProduct.price.toLocaleString();
+    updateModalPrice();
     document.getElementById('modalQty').textContent = '1';
     document.getElementById('productModal').classList.add('show');
 }
@@ -236,6 +297,14 @@ function closeProductModal() {
 function changeQty(delta) {
     currentQty = Math.max(1, currentQty + delta);
     document.getElementById('modalQty').textContent = currentQty;
+    updateModalPrice();
+}
+
+function updateModalPrice() {
+    if (currentProduct) {
+        var total = currentProduct.price * currentQty;
+        document.getElementById('modalPrice').textContent = '$' + total.toLocaleString();
+    }
 }
 
 function addToCartFromModal() {
@@ -255,19 +324,31 @@ function closeCartModal() {
 }
 
 // ================================================================
-// 6. ENVIAR PEDIDO
+// 7. ENVIAR PEDIDO POR WHATSAPP (MEJORADO)
 // ================================================================
 
 function sendOrder() {
     if (cart.length === 0) return;
     
     var total = getTotal();
-    var msg = '🛒 *Nuevo Pedido Plaza Vieja*%0A%0A';
+    var pesoTotal = cart.reduce(function(s, i) {
+        return s + (i.weight || 0.5) * i.quantity;
+    }, 0);
+    
+    // Construir mensaje con estructura clara para el admin
+    var msg = '🛒 *NUEVO PEDIDO - PLAZA VIEJA*%0A%0A';
+    msg += '📋 *PRODUCTOS:*%0A';
     cart.forEach(function(item) {
-        msg += '- ' + item.name + ' × ' + item.quantity + ' = $' + (item.price * item.quantity).toLocaleString() + '%0A';
+        msg += '  • ' + item.name + ' × ' + item.quantity + ' = $' + (item.price * item.quantity).toLocaleString() + '%0A';
     });
-    msg += '%0A💰 *Total: $' + total.toLocaleString() + ' CUP*%0A%0A';
-    msg += '📞 Confirmar pedido al: 56382909';
+    msg += '%0A💰 *Total: $' + total.toLocaleString() + ' CUP*';
+    msg += '%0A📦 *Peso aprox: ' + pesoTotal.toFixed(1) + ' kg*';
+    msg += '%0A%0A--- DATOS DEL CLIENTE ---';
+    msg += '%0A📍 *Dirección:* (Pendiente de confirmar)';
+    msg += '%0A📞 *Teléfono:* (Pendiente de confirmar)';
+    msg += '%0A⏰ *Horario preferido:* (Mañana / Tarde)';
+    msg += '%0A💳 *Pago:* (Efectivo / Transferencia)';
+    msg += '%0A%0A📌 *El administrador confirmará los datos y coordinará la entrega.*';
     
     var url = 'https://wa.me/5356382909?text=' + msg;
     window.open(url, '_blank');
@@ -275,7 +356,7 @@ function sendOrder() {
 }
 
 // ================================================================
-// 7. TOAST Y ANIMACIONES
+// 8. TOAST Y ANIMACIONES
 // ================================================================
 
 var toastTimeout;
@@ -299,7 +380,7 @@ function shakeCart() {
 }
 
 // ================================================================
-// 8. INICIALIZACIÓN
+// 9. INICIALIZACIÓN
 // ================================================================
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -315,7 +396,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }).join('');
     }
     
-    renderProducts();
+    // Renderizar categorías rápidas
+    renderQuickCategories();
+    
+    // Renderizar productos (el spinner se oculta automáticamente)
+    setTimeout(function() {
+        renderProducts();
+    }, 300);
+    
+    // Actualizar carrito
     updateUI();
     
     // Cerrar modales con click fuera
@@ -329,7 +418,16 @@ document.addEventListener('DOMContentLoaded', function() {
     var header = document.getElementById('mainHeader');
     window.addEventListener('scroll', function() {
         if (header) header.classList.toggle('scrolled', window.scrollY > 80);
+        showBackToTop();
     });
+    
+    // Botón volver arriba
+    function showBackToTop() {
+        var btn = document.getElementById('backToTop');
+        if (!btn) return;
+        btn.style.display = window.scrollY > 400 ? 'flex' : 'none';
+    }
+    showBackToTop();
     
     // Animaciones
     if ('IntersectionObserver' in window) {
