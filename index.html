@@ -11,15 +11,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Font Awesome para íconos -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         /* ============================================
            ESTILOS COMPLETOS (Sin Tailwind)
            ============================================ */
-        
-        /* Reset y base */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
@@ -47,13 +45,11 @@
             padding-bottom: 80px;
         }
         
-        /* Contenedor */
         .container {
             max-width: 1280px;
             margin: 0 auto;
             padding: 0 16px;
         }
-        
         @media (min-width: 640px) { .container { padding: 0 24px; } }
         @media (min-width: 1024px) { .container { padding: 0 32px; } }
         
@@ -93,6 +89,7 @@
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid rgba(255,255,255,0.2);
+            background: var(--primary);
         }
         .logo span {
             font-size: 1.125rem;
@@ -113,7 +110,6 @@
             transition: var(--transition);
         }
         .nav-links a:hover { color: rgba(255,255,255,0.7); }
-        
         @media (min-width: 768px) { .nav-links { display: flex; } }
         
         .menu-btn {
@@ -126,10 +122,10 @@
         @media (min-width: 768px) { .menu-btn { display: none; } }
         
         /* ============================================
-           HERO BANNER
+           HERO
            ============================================ */
         .hero {
-            min-height: 500px;
+            min-height: 400px;
             background: linear-gradient(135deg, #0d3b33 0%, #1a5a4a 100%);
             display: flex;
             align-items: center;
@@ -144,8 +140,7 @@
             position: absolute;
             inset: 0;
             background: url('productos/Beicon laminado 1 kilo 9000.png') center/cover no-repeat;
-            opacity: 0.15;
-            filter: blur(2px);
+            opacity: 0.1;
         }
         .hero-content {
             position: relative;
@@ -181,7 +176,6 @@
             transform: scale(1.05);
             background: var(--accent-light);
         }
-        
         @media (min-width: 768px) {
             .hero h1 { font-size: 3.75rem; }
             .hero p { font-size: 1.25rem; }
@@ -190,9 +184,7 @@
         /* ============================================
            SECCIONES
            ============================================ */
-        .section {
-            padding: 60px 0;
-        }
+        .section { padding: 60px 0; }
         .section-title {
             text-align: center;
             font-size: 1.875rem;
@@ -207,15 +199,12 @@
             margin: 0 auto 40px;
             font-size: 1.0625rem;
         }
-        @media (min-width: 768px) {
-            .section-title { font-size: 2.25rem; }
-        }
-        
+        @media (min-width: 768px) { .section-title { font-size: 2.25rem; } }
         .bg-white { background: var(--white); }
         .bg-gray { background: var(--bg); }
         
         /* ============================================
-           VENTAJAS (Grid)
+           VENTAJAS
            ============================================ */
         .ventajas-grid {
             display: grid;
@@ -233,29 +222,16 @@
             transition: var(--transition);
         }
         .ventaja-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
-        .ventaja-card .icon {
-            font-size: 32px;
-            color: var(--primary);
-            margin-bottom: 12px;
-        }
-        .ventaja-card h3 {
-            font-size: 1.0625rem;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-        .ventaja-card p {
-            font-size: 0.875rem;
-            color: var(--text-medium);
-            line-height: 1.5;
-        }
-        
+        .ventaja-card .icon { font-size: 32px; color: var(--primary); margin-bottom: 12px; }
+        .ventaja-card h3 { font-size: 1.0625rem; font-weight: 700; margin-bottom: 6px; }
+        .ventaja-card p { font-size: 0.875rem; color: var(--text-medium); line-height: 1.5; }
         @media (min-width: 640px) {
             .ventajas-grid { grid-template-columns: repeat(4, 1fr); }
             .ventaja-card { padding: 32px 20px; }
         }
         
         /* ============================================
-           FILTROS DE CATEGORÍA
+           FILTROS
            ============================================ */
         .filters {
             display: flex;
@@ -274,6 +250,7 @@
             cursor: pointer;
             transition: var(--transition);
             color: var(--text-medium);
+            font-family: inherit;
         }
         .filter-btn:hover { background: #f3f4f6; }
         .filter-btn.active {
@@ -303,7 +280,7 @@
         }
         
         /* ============================================
-           GRID DE PRODUCTOS
+           PRODUCTOS
            ============================================ */
         .products-grid {
             display: grid;
@@ -312,12 +289,8 @@
             max-width: 1280px;
             margin: 0 auto;
         }
-        @media (min-width: 640px) {
-            .products-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
-        }
-        @media (min-width: 1024px) {
-            .products-grid { grid-template-columns: repeat(4, 1fr); gap: 24px; }
-        }
+        @media (min-width: 640px) { .products-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
+        @media (min-width: 1024px) { .products-grid { grid-template-columns: repeat(4, 1fr); gap: 24px; } }
         
         .product-card {
             background: var(--white);
@@ -390,6 +363,7 @@
             font-size: 0.875rem;
             cursor: pointer;
             transition: var(--transition);
+            font-family: inherit;
         }
         .product-card .info .btn-detail:hover { background: var(--primary-light); }
         
@@ -436,10 +410,7 @@
             font-size: 0.75rem;
             font-weight: 700;
         }
-        .cart-float .total {
-            font-weight: 700;
-            font-size: 1rem;
-        }
+        .cart-float .total { font-weight: 700; font-size: 1rem; }
         
         /* ============================================
            MODALES
@@ -524,6 +495,7 @@
             font-weight: 700;
             cursor: pointer;
             transition: var(--transition);
+            font-family: inherit;
         }
         .qty-selector button:hover { background: #e5e7eb; }
         .qty-selector span {
@@ -543,6 +515,7 @@
             font-size: 1.0625rem;
             cursor: pointer;
             transition: var(--transition);
+            font-family: inherit;
         }
         .modal-box .btn-add:hover { background: var(--accent-light); }
         
@@ -566,6 +539,7 @@
             font-weight: 700;
             cursor: pointer;
             transition: var(--transition);
+            font-family: inherit;
         }
         .modal-box .cart-item .item-controls .minus { background: #fee2e2; color: #dc2626; }
         .modal-box .cart-item .item-controls .plus { background: #dcfce7; color: #16a34a; }
@@ -591,15 +565,13 @@
             cursor: pointer;
             transition: var(--transition);
             margin-top: 12px;
+            font-family: inherit;
         }
         .modal-box .btn-whatsapp:hover { background: #1da851; }
-        .modal-box .btn-whatsapp:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+        .modal-box .btn-whatsapp:disabled { opacity: 0.5; cursor: not-allowed; }
         
         /* ============================================
-           TOAST NOTIFICACIÓN
+           TOAST
            ============================================ */
         .toast {
             position: fixed;
@@ -644,7 +616,7 @@
         footer .social a:hover { color: white; transform: scale(1.1); }
         
         /* ============================================
-           RESPONSIVE
+           UTILIDADES
            ============================================ */
         .hidden { display: none !important; }
         .text-center { text-align: center; }
@@ -662,7 +634,6 @@
             transform: translateY(0);
         }
         
-        /* Shake animation */
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-8px) rotate(-3deg); }
@@ -670,7 +641,6 @@
         }
         .shake { animation: shake 0.5s ease; }
         
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
@@ -684,7 +654,7 @@ HEADER
 <header id="mainHeader">
     <div class="container header-inner">
         <a href="#" class="logo">
-            <img src="productos/logo_el_resolvito.jpg" alt="Plaza Vieja Logo" onerror="this.style.display='none'">
+            <img src="productos/logo el resolvito.jpg" alt="Plaza Vieja Logo" onerror="this.style.display='none'">
             <span>Plaza Vieja</span>
         </a>
         <nav class="nav-links">
