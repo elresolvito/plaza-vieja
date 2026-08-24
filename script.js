@@ -1,9 +1,9 @@
 // ================================================================
-// PLAZA VIEJA - SCRIPT COMPLETO MEJORADO
+// PLAZA VIEJA - SCRIPT COMPLETO
 // ================================================================
 
 // ================================================================
-// 1. CATÁLOGO DE PRODUCTOS
+// 1. CATÁLOGO DE PRODUCTOS (Nombres sin espacios)
 // ================================================================
 
 function extractPrice(filename) {
@@ -23,22 +23,98 @@ function extractWeight(filename) {
 
 var products = [
     // === EMBUTIDOS ===
-    { id: 101, name: "Chorizo Extra Vela", image: "productos/Chorizo extra vela 1.6 kilos 17000.png", desc: "Chorizo extra vela de alta calidad, sabor intenso y ahumado.", category: "Embutidos" },
-    { id: 102, name: "Jamón Serrano Deshuesado", image: "productos/Jamón Serrano deshuesado 5 a 5.5 libras 49000.png", desc: "Jamón serrano deshuesado, corte fino y sabor tradicional.", category: "Embutidos", tag: "nuevo" },
-    { id: 103, name: "Jamón Rápido", image: "productos/Jamón rápido 2 kilos 9000.png", desc: "Jamón rápido, práctico y versátil para el consumo diario.", category: "Embutidos" },
-    { id: 104, name: "Jamón Barra", image: "productos/Jamón barra 2 kilos 9000.png", desc: "Jamón en barra, ideal para lonchear y preparar sándwiches.", category: "Embutidos" },
+    { 
+        id: 101, 
+        name: "Chorizo Extra Vela", 
+        image: "productos/chorizo-extra-1.6kg-17000.png", 
+        desc: "Chorizo extra vela de alta calidad, sabor intenso y ahumado.", 
+        category: "Embutidos" 
+    },
+    { 
+        id: 102, 
+        name: "Jamón Serrano Deshuesado", 
+        image: "productos/jamon-serrano-5lb-49000.png", 
+        desc: "Jamón serrano deshuesado, corte fino y sabor tradicional.", 
+        category: "Embutidos", 
+        tag: "nuevo" 
+    },
+    { 
+        id: 103, 
+        name: "Jamón Rápido", 
+        image: "productos/jamon-rapido-2kg-9000.png", 
+        desc: "Jamón rápido, práctico y versátil para el consumo diario.", 
+        category: "Embutidos" 
+    },
+    { 
+        id: 104, 
+        name: "Jamón Barra", 
+        image: "productos/jamon-barra-2kg-9000.png", 
+        desc: "Jamón en barra, ideal para lonchear y preparar sándwiches.", 
+        category: "Embutidos" 
+    },
     
     // === BEICONES ===
-    { id: 201, name: "Beicon Laminado 1kg", image: "productos/Beicon laminado 1 kilo 9000.png", desc: "Beicon laminado en finas lonchas, perfecto para desayunos.", category: "Beicones", tag: "oferta" },
-    { id: 202, name: "Beicon Laminado 2kg", image: "productos/Beicon laminado de 2 kilos 17000.png", desc: "Beicon laminado en lonchas, formato económico.", category: "Beicones" },
-    { id: 203, name: "Beicon Troceado Lasqueado", image: "productos/Beicon troceado Lasqueado 3 kilos 17000.png", desc: "Beicon troceado y lasqueado, ideal para guisos.", category: "Beicones" },
-    { id: 204, name: "Beicon Molde Natural", image: "productos/Beicon molde natural de 5 kilos 29000.png", desc: "Beicon en molde natural, sabor auténtico.", category: "Beicones" },
+    { 
+        id: 201, 
+        name: "Beicon Laminado 1kg", 
+        image: "productos/beicon-laminado-1kg-9000.png", 
+        desc: "Beicon laminado en finas lonchas, perfecto para desayunos.", 
+        category: "Beicones", 
+        tag: "oferta" 
+    },
+    { 
+        id: 202, 
+        name: "Beicon Laminado 2kg", 
+        image: "productos/beicon-laminado-2kg-17000.png", 
+        desc: "Beicon laminado en lonchas, formato económico.", 
+        category: "Beicones" 
+    },
+    { 
+        id: 203, 
+        name: "Beicon Troceado Lasqueado", 
+        image: "productos/beicon-troceado-3kg-17000.png", 
+        desc: "Beicon troceado y lasqueado, ideal para guisos.", 
+        category: "Beicones" 
+    },
+    { 
+        id: 204, 
+        name: "Beicon Molde Natural", 
+        image: "productos/beicon-molde-5kg-29000.png", 
+        desc: "Beicon en molde natural, sabor auténtico.", 
+        category: "Beicones" 
+    },
     
     // === QUESOS ===
-    { id: 301, name: "Queso Gouda Alemán", image: "productos/Gouda alemán 3,1 kilos 20500.png", desc: "Queso Gouda alemán, cremoso y con sabor intenso.", category: "Quesos" },
-    { id: 302, name: "Queso Gouda Holandés", image: "productos/Gouda holandés 3,1 kilos 21500.png", desc: "Queso Gouda holandés, aroma y sabor inconfundibles.", category: "Quesos" },
-    { id: 303, name: "Queso Azul", image: "productos/Queso azul 3 kilos 31000.png", desc: "Queso azul de sabor fuerte y con carácter.", category: "Quesos", tag: "nuevo" },
-    { id: 304, name: "Queso de Cabra con Miel", image: "productos/Queso de cabra valle de San Juan con crema de miel 3.5 kilos 25000.png", desc: "Exquisito queso de cabra del Valle de San Juan con miel.", category: "Quesos", tag: "oferta" }
+    { 
+        id: 301, 
+        name: "Queso Gouda Alemán", 
+        image: "productos/gouda-aleman-3.1kg-20500.png", 
+        desc: "Queso Gouda alemán, cremoso y con sabor intenso.", 
+        category: "Quesos" 
+    },
+    { 
+        id: 302, 
+        name: "Queso Gouda Holandés", 
+        image: "productos/gouda-holandes-3.1kg-21500.png", 
+        desc: "Queso Gouda holandés, aroma y sabor inconfundibles.", 
+        category: "Quesos" 
+    },
+    { 
+        id: 303, 
+        name: "Queso Azul", 
+        image: "productos/queso-azul-3kg-31000.png", 
+        desc: "Queso azul de sabor fuerte y con carácter.", 
+        category: "Quesos", 
+        tag: "nuevo" 
+    },
+    { 
+        id: 304, 
+        name: "Queso de Cabra con Miel", 
+        image: "productos/queso-cabra-miel-3.5kg-25000.png", 
+        desc: "Exquisito queso de cabra del Valle de San Juan con miel.", 
+        category: "Quesos", 
+        tag: "oferta" 
+    }
 ];
 
 // Procesar productos
@@ -61,13 +137,11 @@ products.sort(function(a, b) {
 // 2. CARRITO CON PERSISTENCIA
 // ================================================================
 
-// Cargar carrito con expiración (7 días)
 function loadCart() {
     var data = localStorage.getItem('plazaCart');
     if (data) {
         try {
             var parsed = JSON.parse(data);
-            // Verificar expiración
             if (parsed.expires && parsed.expires > Date.now()) {
                 return parsed.items || [];
             }
@@ -81,7 +155,7 @@ var cart = loadCart();
 function saveCart() {
     localStorage.setItem('plazaCart', JSON.stringify({
         items: cart,
-        expires: Date.now() + 7 * 24 * 60 * 60 * 1000 // 7 días
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000
     }));
     updateUI();
 }
@@ -99,7 +173,13 @@ function addToCart(product, qty) {
     if (existing) {
         existing.quantity += qty;
     } else {
-        cart.push({ id: product.id, name: product.name, price: product.price, quantity: qty, weight: product.weight });
+        cart.push({ 
+            id: product.id, 
+            name: product.name, 
+            price: product.price, 
+            quantity: qty, 
+            weight: product.weight 
+        });
     }
     saveCart();
     showToast('¡' + product.name + ' añadido!');
@@ -156,7 +236,7 @@ function updateUI() {
 }
 
 // ================================================================
-// 3. RENDERIZAR PRODUCTOS CON SPINNER Y ETIQUETAS
+// 3. RENDERIZAR PRODUCTOS
 // ================================================================
 
 var currentCategory = 'all';
@@ -168,7 +248,6 @@ function renderProducts() {
     var search = document.getElementById('searchInput');
     var searchTerm = search ? search.value.toLowerCase() : '';
     
-    // Ocultar spinner
     var spinner = document.getElementById('loadingSpinner');
     if (spinner) spinner.style.display = 'none';
     
@@ -199,7 +278,6 @@ function renderProducts() {
     cats.forEach(function(cat) {
         html += '<div style="grid-column:1/-1;text-align:center;padding:16px 0 8px;"><h3 style="font-size:1.25rem;font-weight:800;color:var(--primary);border-bottom:2px solid #e5e7eb;padding-bottom:8px;display:inline-block;">— ' + cat + ' —</h3></div>';
         grouped[cat].forEach(function(p) {
-            // Etiqueta de oferta/nuevo
             var tagHtml = '';
             if (p.tag === 'oferta') {
                 tagHtml = '<span class="product-tag">Oferta</span>';
@@ -226,7 +304,7 @@ function renderProducts() {
 }
 
 // ================================================================
-// 4. CATEGORÍAS RÁPIDAS (NUEVO)
+// 4. CATEGORÍAS RÁPIDAS
 // ================================================================
 
 function renderQuickCategories() {
@@ -251,13 +329,11 @@ function renderQuickCategories() {
 function filterByCategory(cat) {
     currentCategory = cat;
     
-    // Actualizar botones de filtros
     var btns = document.querySelectorAll('.filter-btn');
     btns.forEach(function(b) {
         b.classList.toggle('active', b.dataset.category === cat);
     });
     
-    // Actualizar categorías rápidas
     var quickBtns = document.querySelectorAll('.quick-cat-btn');
     quickBtns.forEach(function(b) {
         b.classList.toggle('active', b.dataset.category === cat);
@@ -324,7 +400,7 @@ function closeCartModal() {
 }
 
 // ================================================================
-// 7. ENVIAR PEDIDO POR WHATSAPP (MEJORADO)
+// 7. ENVIAR PEDIDO POR WHATSAPP
 // ================================================================
 
 function sendOrder() {
@@ -335,7 +411,6 @@ function sendOrder() {
         return s + (i.weight || 0.5) * i.quantity;
     }, 0);
     
-    // Construir mensaje con estructura clara para el admin
     var msg = '🛒 *NUEVO PEDIDO - PLAZA VIEJA*%0A%0A';
     msg += '📋 *PRODUCTOS:*%0A';
     cart.forEach(function(item) {
@@ -384,7 +459,6 @@ function shakeCart() {
 // ================================================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Generar filtros
     var cats = ['all'];
     products.forEach(function(p) {
         if (cats.indexOf(p.category) === -1) cats.push(p.category);
@@ -396,32 +470,26 @@ document.addEventListener('DOMContentLoaded', function() {
         }).join('');
     }
     
-    // Renderizar categorías rápidas
     renderQuickCategories();
     
-    // Renderizar productos (el spinner se oculta automáticamente)
     setTimeout(function() {
         renderProducts();
     }, 300);
     
-    // Actualizar carrito
     updateUI();
     
-    // Cerrar modales con click fuera
     document.querySelectorAll('.modal-overlay').forEach(function(m) {
         m.addEventListener('click', function(e) {
             if (e.target === this) this.classList.remove('show');
         });
     });
     
-    // Header scroll
     var header = document.getElementById('mainHeader');
     window.addEventListener('scroll', function() {
         if (header) header.classList.toggle('scrolled', window.scrollY > 80);
         showBackToTop();
     });
     
-    // Botón volver arriba
     function showBackToTop() {
         var btn = document.getElementById('backToTop');
         if (!btn) return;
@@ -429,7 +497,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     showBackToTop();
     
-    // Animaciones
     if ('IntersectionObserver' in window) {
         var observer = new IntersectionObserver(function(entries) {
             entries.forEach(function(e) {
