@@ -6,21 +6,22 @@
     <title>Plaza Vieja | Tu Tienda a Domicilio en La Habana</title>
     <meta name="description" content="Encuentra embutidos, quesos y más en Plaza Vieja. Haz tu pedido online y recíbelo en La Habana.">
     
-   <!-- ============================================
-PWA - MANIFEST Y CONFIGURACIÓN
-============================================ -->
-<link rel="manifest" href="/plaza-vieja/manifest.json">
-<meta name="theme-color" content="#0d3b33">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Plaza Vieja">
-
-<!-- Íconos para todas las plataformas -->
-<link rel="apple-touch-icon" sizes="180x180" href="productos/favicon_io/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="productos/favicon_io/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="productos/favicon_io/favicon-16x16.png">
-<link rel="icon" type="image/x-icon" href="productos/favicon_io/favicon.ico">
-<meta name="msapplication-TileColor" content="#0d3b33">
+    <!-- ============================================
+    PWA - MANIFEST Y CONFIGURACIÓN
+    ============================================ -->
+    <link rel="manifest" href="/plaza-vieja/manifest.json">
+    <meta name="theme-color" content="#0d3b33">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Plaza Vieja">
+    
+    <!-- Íconos para todas las plataformas -->
+    <link rel="apple-touch-icon" sizes="180x180" href="productos/favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="productos/favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="productos/favicon_io/favicon-16x16.png">
+    <link rel="icon" type="image/x-icon" href="productos/favicon_io/favicon.ico">
+    <meta name="msapplication-TileColor" content="#0d3b33">
     
     <!-- ============================================
     FUENTES Y ESTILOS
@@ -61,7 +62,6 @@ PWA - MANIFEST Y CONFIGURACIÓN
             padding-bottom: 80px;
         }
         
-        /* Cuando la app está instalada */
         body.app-installed {
             padding-top: env(safe-area-inset-top);
             padding-bottom: env(safe-area-inset-bottom);
@@ -557,12 +557,12 @@ PWA - MANIFEST Y CONFIGURACIÓN
             bottom: 80px;
             left: 50%;
             transform: translateX(-50%);
-            background: var(--primary);
+            background: linear-gradient(135deg, #0d3b33 0%, #1a5a4a 100%);
             color: white;
-            padding: 16px 20px;
+            padding: 18px 24px;
             border-radius: 16px;
             z-index: 9998;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
             max-width: 90%;
             width: 400px;
             text-align: center;
@@ -579,24 +579,23 @@ PWA - MANIFEST Y CONFIGURACIÓN
             right: 12px;
             background: none;
             border: none;
-            color: rgba(255,255,255,0.6);
+            color: rgba(255,255,255,0.5);
             font-size: 20px;
             cursor: pointer;
             transition: var(--transition);
         }
         #installBanner .close-banner:hover { color: white; }
-        #installBanner .banner-icon {
-            font-size: 32px;
-            margin-bottom: 8px;
-        }
+        #installBanner .banner-icon { font-size: 36px; margin-bottom: 6px; }
         #installBanner h4 {
             font-size: 1.0625rem;
+            font-weight: 800;
             margin-bottom: 4px;
         }
         #installBanner p {
             font-size: 0.8125rem;
-            opacity: 0.8;
+            opacity: 0.85;
             margin-bottom: 12px;
+            line-height: 1.4;
         }
         #installBanner .btn-install {
             background: var(--accent);
@@ -875,7 +874,7 @@ HEADER
 <header id="mainHeader">
     <div class="container header-inner">
         <a href="#" class="logo">
-            <img src="productos/logo.jpg" alt="Plaza Vieja Logo" onerror="this.style.display='none'">
+            <img src="productos/logo-plaza-vieja.webp" alt="Plaza Vieja Logo" onerror="this.style.display='none'">
             <span>Plaza Vieja</span>
         </a>
         <nav class="nav-links">
@@ -1004,8 +1003,8 @@ BANNER DE INSTALACIÓN DE APP (PWA)
 <div id="installBanner">
     <button class="close-banner" onclick="document.getElementById('installBanner').style.display='none'">&times;</button>
     <div class="banner-icon">📱</div>
-    <h4>¡Instala Plaza Vieja como App!</h4>
-    <p>Disfruta de una experiencia más rápida, sin conexión y con acceso directo desde tu pantalla de inicio.</p>
+    <h4>¿Quieres la tienda en tu pantalla de inicio?</h4>
+    <p>Instala Plaza Vieja como app y compra más rápido. <strong>Sin descargas ni datos extra.</strong></p>
     <button class="btn-install" id="installAppBtn">
         <i class="fas fa-download"></i> Instalar App
     </button>
@@ -1065,7 +1064,7 @@ BOTÓN VOLVER ARRIBA
 </button>
 
 <!-- ============================================
-SCRIPT - CON REGISTRO DE SERVICE WORKER
+SCRIPT
 ============================================ -->
 <script src="script.js"></script>
 
@@ -1096,7 +1095,7 @@ if (window.matchMedia('(display-mode: standalone)').matches) {
 }
 
 // ================================================================
-// BANNER DE INSTALACIÓN
+// BANNER DE INSTALACIÓN - CORREGIDO
 // ================================================================
 
 var deferredPrompt;
@@ -1105,8 +1104,10 @@ var installBanner = document.getElementById('installBanner');
 window.addEventListener('beforeinstallprompt', function(e) {
     e.preventDefault();
     deferredPrompt = e;
-    installBanner.style.display = 'block';
-    console.log('📲 Evento beforeinstallprompt detectado');
+    if (installBanner) {
+        installBanner.style.display = 'block';
+        console.log('📲 Banner de instalación mostrado');
+    }
 });
 
 document.getElementById('installAppBtn').addEventListener('click', function() {
@@ -1115,7 +1116,7 @@ document.getElementById('installAppBtn').addEventListener('click', function() {
         deferredPrompt.userChoice.then(function(choiceResult) {
             if (choiceResult.outcome === 'accepted') {
                 console.log('✅ Usuario aceptó instalar la app');
-                installBanner.style.display = 'none';
+                if (installBanner) installBanner.style.display = 'none';
             } else {
                 console.log('❌ Usuario rechazó instalar la app');
             }
@@ -1124,18 +1125,13 @@ document.getElementById('installAppBtn').addEventListener('click', function() {
     }
 });
 
-// Si la app ya está instalada, ocultar banner
 if (window.matchMedia('(display-mode: standalone)').matches) {
-    installBanner.style.display = 'none';
+    if (installBanner) installBanner.style.display = 'none';
 }
-
-// ================================================================
-// DETECTAR CUANDO LA APP SE INSTALA DESDE EL BANNER
-// ================================================================
 
 window.addEventListener('appinstalled', function() {
     console.log('✅ App instalada correctamente');
-    installBanner.style.display = 'none';
+    if (installBanner) installBanner.style.display = 'none';
 });
 </script>
 
