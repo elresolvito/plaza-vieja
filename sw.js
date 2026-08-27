@@ -22,8 +22,8 @@ const urlsToCache = [
 const productImages = [
     'productos/chorizo-extra-1.6kg-17000.png',
     'productos/jamon-serrano-5lb-49000.png',
-    'productos/jamon-rapido-2kg-9000.png',
-    'productos/jamon-barra-2kg-9000.png',
+    'productos/jamon-rapido-2kg-10000.png',
+    'productos/jamon-barra-2kg-10000.png',
     'productos/beicon-laminado-1kg-9000.png',
     'productos/beicon-laminado-2kg-17000.png',
     'productos/beicon-troceado-3kg-17000.png',
