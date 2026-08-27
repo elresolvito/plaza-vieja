@@ -344,6 +344,33 @@
             .hero p { font-size: 1.25rem; }
         }
         
+        /* Botón QR en hero */
+        .hero .btn-qr {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(4px);
+            color: white;
+            font-weight: 600;
+            padding: 10px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 0.9375rem;
+            border: 1px solid rgba(255,255,255,0.15);
+            transition: var(--transition);
+            margin-top: 12px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .hero .btn-qr:hover {
+            background: rgba(255,255,255,0.25);
+            transform: scale(1.05);
+        }
+        .hero .btn-qr i {
+            font-size: 18px;
+        }
+        
         /* ============================================
            SECCIONES
            ============================================ */
@@ -734,6 +761,92 @@
         }
         footer .social a:hover { color: white; transform: scale(1.1); }
         
+        /* Sección QR en footer */
+        .footer-qr {
+            text-align: center;
+            padding: 20px 0 12px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            margin-top: 16px;
+        }
+        .footer-qr .qr-box {
+            display: inline-block;
+            background: white;
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        .footer-qr .qr-box:hover {
+            transform: scale(1.05);
+        }
+        .footer-qr .qr-box img {
+            width: 130px;
+            height: 130px;
+            display: block;
+            border-radius: 8px;
+        }
+        .footer-qr p {
+            margin-top: 10px;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.8125rem;
+        }
+        .footer-qr p i {
+            margin-right: 6px;
+        }
+        
+        /* ============================================
+           MODAL QR (Compartir)
+           ============================================ */
+        #qrModal .modal-box {
+            text-align: center;
+            max-width: 380px;
+        }
+        #qrModal .modal-box .qr-large {
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            display: inline-block;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            margin: 8px 0;
+        }
+        #qrModal .modal-box .qr-large img {
+            width: 220px;
+            height: 220px;
+            display: block;
+            border-radius: 8px;
+        }
+        #qrModal .modal-box .qr-link {
+            color: var(--primary);
+            font-weight: 600;
+            word-break: break-all;
+            font-size: 0.8125rem;
+            background: var(--bg);
+            padding: 8px 12px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-top: 8px;
+        }
+        #qrModal .modal-box .btn-copy {
+            margin-top: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        #qrModal .modal-box .btn-copy:hover {
+            background: var(--primary-light);
+            transform: scale(1.02);
+        }
+        
         /* ============================================
            UTILIDADES
            ============================================ */
@@ -780,6 +893,8 @@
             .modal-box h2 { font-size: 1.25rem; }
             .exit-modal-box { padding: 24px 16px; }
             .exit-modal-box h2 { font-size: 1.25rem; }
+            .footer-qr .qr-box img { width: 100px; height: 100px; }
+            #qrModal .modal-box .qr-large img { width: 160px; height: 160px; }
         }
     </style>
 </head>
@@ -817,13 +932,10 @@ HERO
         <h1>PLAZA VIEJA</h1>
         <p>Embutidos, quesos y productos de alta gama seleccionados para ti. <strong>Disfruta de lo mejor sin moverte de casa.</strong></p>
         <a href="#mercado" class="btn-primary">Explorar Productos</a>
+        <button class="btn-qr" onclick="document.getElementById('qrModal').classList.add('show')">
+            <i class="fas fa-qrcode"></i> Compartir QR
+        </button>
     </div>
-    <!-- Botón QR en el hero -->
-<div style="margin-top:20px;display:flex;flex-wrap:wrap;gap:12px;justify-content:center;">
-    <a href="#qr" style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.15);backdrop-filter:blur(4px);color:white;font-weight:600;padding:10px 24px;border-radius:50px;text-decoration:none;font-size:0.9375rem;border:1px solid rgba(255,255,255,0.2);">
-        <i class="fas fa-qrcode"></i> Compartir QR
-    </a>
-</div>
 </section>
 
 <!-- ============================================
@@ -914,7 +1026,7 @@ CONTACTO
 </section>
 
 <!-- ============================================
-FOOTER
+FOOTER CON QR
 ============================================ -->
 <footer>
     <div class="container">
@@ -922,8 +1034,44 @@ FOOTER
             <a href="https://wa.me/5356382909?text=¡Hola!%20Quiero%20hacer%20un%20pedido." target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
         </div>
         <p>&copy; 2024 Plaza Vieja. Todos los derechos reservados.</p>
+        
+        <!-- Sección QR en el footer -->
+        <div class="footer-qr">
+            <div class="qr-box" onclick="document.getElementById('qrModal').classList.add('show')" title="Toca para ver QR más grande y compartir">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://elresolvito.github.io/plaza-vieja/&bgcolor=ffffff&color=0d3b33&margin=20" 
+                     alt="Escanea para abrir Plaza Vieja" 
+                     loading="lazy">
+            </div>
+            <p><i class="fas fa-qrcode"></i> Escanea y compra al instante</p>
+        </div>
     </div>
 </footer>
+
+<!-- ============================================
+MODAL QR - COMPARTIR
+============================================ -->
+<div class="modal-overlay" id="qrModal">
+    <div class="modal-box">
+        <button class="close" onclick="document.getElementById('qrModal').classList.remove('show')">&times;</button>
+        <h2 style="margin-bottom:8px;">📱 Comparte Plaza Vieja</h2>
+        <p style="color:var(--text-medium);font-size:0.9375rem;margin-bottom:12px;">
+            Escanea este código QR y accede a la tienda al instante
+        </p>
+        <div class="qr-large">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://elresolvito.github.io/plaza-vieja/&bgcolor=ffffff&color=0d3b33&margin=20" 
+                 alt="QR Plaza Vieja" 
+                 loading="lazy">
+        </div>
+        <p style="font-size:0.8125rem;color:var(--text-light);margin-top:8px;">
+            O comparte el enlace:
+        </p>
+        <div class="qr-link" id="qrLinkText">elresolvito.github.io/plaza-vieja</div>
+        <br>
+        <button class="btn-copy" onclick="copiarEnlace()">
+            <i class="fas fa-copy"></i> Copiar enlace
+        </button>
+    </div>
+</div>
 
 <!-- ============================================
 MODAL DE SALIDA - SUGERENCIA DE INSTALACIÓN
@@ -1051,42 +1199,25 @@ window.addEventListener('beforeinstallprompt', function(e) {
     console.log('📲 Evento beforeinstallprompt detectado');
 });
 
-// Función para mostrar el modal de salida
 function showExitModal() {
-    // No mostrar si ya está instalada
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-        return;
-    }
-    // No mostrar si ya se mostró antes
-    if (exitModalShown) {
-        return;
-    }
-    // Mostrar modal
+    if (window.matchMedia('(display-mode: standalone)').matches) return;
+    if (exitModalShown) return;
     if (exitModal) {
         exitModal.classList.add('show');
         exitModalShown = true;
     }
 }
 
-// Detectar cuando el usuario intenta cerrar la página
 document.addEventListener('mouseleave', function(e) {
-    // Solo si el mouse sale por la parte superior (hacia la barra de pestañas)
-    if (e.clientY < 0) {
-        showExitModal();
-    }
+    if (e.clientY < 0) showExitModal();
 });
 
-// Para móviles: detectar cuando el usuario intenta cerrar la pestaña
 document.addEventListener('visibilitychange', function() {
     if (document.visibilityState === 'hidden') {
-        // Pequeño retraso para no molestar al cambiar de app
-        setTimeout(function() {
-            showExitModal();
-        }, 100);
+        setTimeout(showExitModal, 100);
     }
 });
 
-// Botón: Instalar app
 exitInstallBtn.addEventListener('click', function() {
     if (deferredPrompt) {
         deferredPrompt.prompt();
@@ -1100,27 +1231,46 @@ exitInstallBtn.addEventListener('click', function() {
             exitModal.classList.remove('show');
         });
     } else {
-        // Si no hay evento beforeinstallprompt, mostrar mensaje
         alert('Para instalar la app, abre esta página en Chrome o Safari y toca "Agregar a pantalla de inicio".');
         exitModal.classList.remove('show');
     }
 });
 
-// Botón: Cerrar y salir
 exitCloseBtn.addEventListener('click', function() {
     exitModal.classList.remove('show');
-    // Cerrar la página después de un breve momento
-    setTimeout(function() {
-        window.close();
-    }, 300);
+    setTimeout(function() { window.close(); }, 300);
 });
 
-// Cerrar modal haciendo clic fuera
 exitModal.addEventListener('click', function(e) {
-    if (e.target === this) {
-        exitModal.classList.remove('show');
-    }
+    if (e.target === this) exitModal.classList.remove('show');
 });
+
+// ================================================================
+// COPIAR ENLACE
+// ================================================================
+
+function copiarEnlace() {
+    var enlace = 'https://elresolvito.github.io/plaza-vieja/';
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(enlace).then(function() {
+            showToast('✅ Enlace copiado al portapapeles');
+        }).catch(function() {
+            copiarEnlaceFallback(enlace);
+        });
+    } else {
+        copiarEnlaceFallback(enlace);
+    }
+}
+
+function copiarEnlaceFallback(texto) {
+    var input = document.createElement('input');
+    input.value = texto;
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand('copy');
+    document.body.removeChild(input);
+    showToast('✅ Enlace copiado al portapapeles');
+}
 
 // ================================================================
 // INDICADOR DE ESTADO DE CACHÉ
@@ -1129,19 +1279,13 @@ exitModal.addEventListener('click', function(e) {
 function showCacheStatus() {
     var status = document.getElementById('cacheStatus');
     if (!status) return;
-    
     status.classList.add('show');
     status.textContent = '📦 Todo en caché';
-    
-    setTimeout(function() {
-        status.classList.remove('show');
-    }, 3000);
+    setTimeout(function() { status.classList.remove('show'); }, 3000);
 }
 
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.ready.then(function() {
-        showCacheStatus();
-    });
+    navigator.serviceWorker.ready.then(showCacheStatus);
 }
 
 window.addEventListener('online', function() {
@@ -1168,7 +1312,6 @@ window.addEventListener('offline', function() {
 // ================================================================
 
 var menuBtn = document.getElementById('menuBtn');
-var mobileMenuOpen = false;
 var mobileMenu = document.createElement('div');
 mobileMenu.id = 'mobileMenu';
 mobileMenu.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(13,59,51,0.98);z-index:999;display:none;flex-direction:column;justify-content:center;align-items:center;gap:24px;padding:20px;';
@@ -1181,14 +1324,8 @@ mobileMenu.innerHTML = `
 `;
 document.body.appendChild(mobileMenu);
 
-function openMobileMenu() {
-    mobileMenu.style.display = 'flex';
-}
-
-function closeMobileMenu() {
-    mobileMenu.style.display = 'none';
-}
-
+function openMobileMenu() { mobileMenu.style.display = 'flex'; }
+function closeMobileMenu() { mobileMenu.style.display = 'none'; }
 menuBtn.addEventListener('click', openMobileMenu);
 </script>
 
