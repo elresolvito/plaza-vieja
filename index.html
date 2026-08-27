@@ -102,6 +102,121 @@
         }
         
         /* ============================================
+           MODAL DE SALIDA - SUGERENCIA DE INSTALACIÓN
+           ============================================ */
+        #exitModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeInExit 0.4s ease;
+        }
+        #exitModal.show {
+            display: flex;
+        }
+        @keyframes fadeInExit {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .exit-modal-box {
+            background: var(--white);
+            border-radius: 24px;
+            max-width: 420px;
+            width: 100%;
+            padding: 32px 28px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .exit-modal-box .exit-icon {
+            font-size: 56px;
+            margin-bottom: 12px;
+        }
+        .exit-modal-box h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+        .exit-modal-box p {
+            color: var(--text-medium);
+            font-size: 0.9375rem;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        .exit-modal-box .features-list {
+            text-align: left;
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+        }
+        .exit-modal-box .features-list li {
+            list-style: none;
+            padding: 4px 0;
+            font-size: 0.875rem;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .exit-modal-box .features-list li i {
+            color: var(--primary);
+            font-size: 16px;
+        }
+        .exit-modal-box .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .exit-modal-box .btn-install-exit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.0625rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .exit-modal-box .btn-install-exit:hover {
+            background: var(--primary-light);
+            transform: scale(1.02);
+        }
+        .exit-modal-box .btn-install-exit i {
+            font-size: 18px;
+        }
+        .exit-modal-box .btn-close-exit {
+            background: transparent;
+            color: var(--text-medium);
+            border: 1px solid #e5e7eb;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9375rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        .exit-modal-box .btn-close-exit:hover {
+            background: #f3f4f6;
+        }
+        .exit-modal-box .btn-close-exit i {
+            margin-right: 6px;
+        }
+        
+        /* ============================================
            HEADER
            ============================================ */
         header {
@@ -575,230 +690,6 @@
         }
         
         /* ============================================
-           BANNER DE INSTALACIÓN DE APP (PWA)
-           ============================================ */
-        #installBanner {
-            display: none;
-            position: fixed;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #0d3b33 0%, #1a5a4a 100%);
-            color: white;
-            padding: 18px 24px;
-            border-radius: 16px;
-            z-index: 9998;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-            max-width: 90%;
-            width: 400px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.1);
-            animation: slideUp 0.5s ease;
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateX(-50%) translateY(30px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
-        }
-        #installBanner .close-banner {
-            position: absolute;
-            top: 8px;
-            right: 12px;
-            background: none;
-            border: none;
-            color: rgba(255,255,255,0.5);
-            font-size: 20px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        #installBanner .close-banner:hover { color: white; }
-        #installBanner .banner-icon { font-size: 36px; margin-bottom: 6px; }
-        #installBanner h4 {
-            font-size: 1.0625rem;
-            font-weight: 800;
-            margin-bottom: 4px;
-        }
-        #installBanner p {
-            font-size: 0.8125rem;
-            opacity: 0.85;
-            margin-bottom: 12px;
-            line-height: 1.4;
-        }
-        #installBanner .btn-install {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 10px 32px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.9375rem;
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: inherit;
-        }
-        #installBanner .btn-install:hover {
-            transform: scale(1.05);
-            background: var(--accent-light);
-        }
-        
-        /* ============================================
-           MODALES
-           ============================================ */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-        }
-        .modal-overlay.show { display: flex; }
-        
-        .modal-box {
-            background: var(--white);
-            border-radius: 24px;
-            max-width: 500px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            padding: 24px;
-            animation: modalIn 0.3s ease;
-        }
-        @keyframes modalIn {
-            from { opacity: 0; transform: translateY(-20px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .modal-box .close {
-            float: right;
-            font-size: 28px;
-            cursor: pointer;
-            color: var(--text-light);
-            transition: var(--transition);
-            background: none;
-            border: none;
-        }
-        .modal-box .close:hover { color: var(--text-dark); }
-        
-        .modal-box h2 {
-            font-size: 1.5rem;
-            font-weight: 800;
-            margin-bottom: 16px;
-        }
-        .modal-box .modal-img {
-            width: 100%;
-            max-height: 250px;
-            object-fit: contain;
-            background: var(--bg);
-            border-radius: 12px;
-            margin-bottom: 16px;
-        }
-        .modal-box .modal-desc {
-            color: var(--text-medium);
-            margin-bottom: 12px;
-            line-height: 1.6;
-        }
-        .modal-box .modal-price {
-            font-size: 1.75rem;
-            font-weight: 800;
-            color: var(--primary);
-            text-align: center;
-            margin-bottom: 16px;
-        }
-        .qty-selector {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            margin: 16px 0;
-        }
-        .qty-selector button {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            border: none;
-            background: var(--bg);
-            font-size: 1.5rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: inherit;
-        }
-        .qty-selector button:hover { background: #e5e7eb; }
-        .qty-selector span {
-            font-size: 1.5rem;
-            font-weight: 700;
-            min-width: 40px;
-            text-align: center;
-        }
-        .modal-box .btn-add {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 12px;
-            background: var(--accent);
-            color: white;
-            font-weight: 700;
-            font-size: 1.0625rem;
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: inherit;
-        }
-        .modal-box .btn-add:hover { background: var(--accent-light); }
-        
-        .modal-box .cart-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #f3f4f6;
-            align-items: center;
-        }
-        .modal-box .cart-item .item-controls {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-        .modal-box .cart-item .item-controls button {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            border: none;
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: inherit;
-        }
-        .modal-box .cart-item .item-controls .minus { background: #fee2e2; color: #dc2626; }
-        .modal-box .cart-item .item-controls .plus { background: #dcfce7; color: #16a34a; }
-        .modal-box .cart-item .item-controls .remove { background: none; color: #ef4444; font-size: 16px; }
-        
-        .modal-box .cart-total {
-            font-size: 1.25rem;
-            font-weight: 800;
-            text-align: right;
-            padding-top: 16px;
-            border-top: 2px solid var(--primary);
-            margin-top: 8px;
-        }
-        .modal-box .btn-whatsapp {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 12px;
-            background: #25d366;
-            color: white;
-            font-weight: 700;
-            font-size: 1.0625rem;
-            cursor: pointer;
-            transition: var(--transition);
-            margin-top: 12px;
-            font-family: inherit;
-        }
-        .modal-box .btn-whatsapp:hover { background: #1da851; }
-        .modal-box .btn-whatsapp:disabled { opacity: 0.5; cursor: not-allowed; }
-        
-        /* ============================================
            TOAST
            ============================================ */
         .toast {
@@ -887,8 +778,8 @@
             .product-card .info .btn-detail { padding: 12px; font-size: 0.85rem; }
             .modal-box { padding: 16px; }
             .modal-box h2 { font-size: 1.25rem; }
-            #installBanner { bottom: 100px; padding: 14px 16px; }
-            #installBanner h4 { font-size: 0.95rem; }
+            .exit-modal-box { padding: 24px 16px; }
+            .exit-modal-box h2 { font-size: 1.25rem; }
         }
     </style>
 </head>
@@ -1024,21 +915,33 @@ FOOTER
         <div class="social">
             <a href="https://wa.me/5356382909?text=¡Hola!%20Quiero%20hacer%20un%20pedido." target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
         </div>
-        <p>&copy; 2026 Plaza Vieja. Todos los derechos reservados.</p>
+        <p>&copy; 2024 Plaza Vieja. Todos los derechos reservados.</p>
     </div>
 </footer>
 
 <!-- ============================================
-BANNER DE INSTALACIÓN DE APP (PWA)
+MODAL DE SALIDA - SUGERENCIA DE INSTALACIÓN
 ============================================ -->
-<div id="installBanner">
-    <button class="close-banner" onclick="document.getElementById('installBanner').style.display='none'">&times;</button>
-    <div class="banner-icon">📱</div>
-    <h4>¿Quieres la tienda en tu pantalla de inicio?</h4>
-    <p>Instala Plaza Vieja como app y compra más rápido. <strong>Sin descargas ni datos extra.</strong></p>
-    <button class="btn-install" id="installAppBtn">
-        <i class="fas fa-download"></i> Instalar App
-    </button>
+<div id="exitModal" class="exit-modal">
+    <div class="exit-modal-box">
+        <div class="exit-icon">📱</div>
+        <h2>¡No te vayas sin tu app!</h2>
+        <p>Instala <strong>Plaza Vieja</strong> en tu pantalla de inicio y disfruta de:</p>
+        <ul class="features-list">
+            <li><i class="fas fa-bolt"></i> Carga instantánea</li>
+            <li><i class="fas fa-wifi-slash"></i> Compra sin conexión</li>
+            <li><i class="fas fa-home"></i> Acceso directo desde tu pantalla</li>
+            <li><i class="fas fa-mobile-alt"></i> Experiencia como app nativa</li>
+        </ul>
+        <div class="btn-group">
+            <button class="btn-install-exit" id="exitInstallBtn">
+                <i class="fas fa-download"></i> Instalar App Gratis
+            </button>
+            <button class="btn-close-exit" id="exitCloseBtn">
+                <i class="fas fa-times"></i> Cerrar y salir
+            </button>
+        </div>
+    </div>
 </div>
 
 <!-- ============================================
@@ -1126,43 +1029,91 @@ if (window.matchMedia('(display-mode: standalone)').matches) {
 }
 
 // ================================================================
-// BANNER DE INSTALACIÓN - CORREGIDO
+// MODAL DE SALIDA - SUGERENCIA DE INSTALACIÓN
 // ================================================================
 
-var deferredPrompt;
-var installBanner = document.getElementById('installBanner');
+var exitModal = document.getElementById('exitModal');
+var exitInstallBtn = document.getElementById('exitInstallBtn');
+var exitCloseBtn = document.getElementById('exitCloseBtn');
+var exitModalShown = false;
+var deferredPrompt = null;
 
+// Detectar evento de instalación
 window.addEventListener('beforeinstallprompt', function(e) {
     e.preventDefault();
     deferredPrompt = e;
-    if (installBanner) {
-        installBanner.style.display = 'block';
-        console.log('📲 Banner de instalación mostrado');
+    console.log('📲 Evento beforeinstallprompt detectado');
+});
+
+// Función para mostrar el modal de salida
+function showExitModal() {
+    // No mostrar si ya está instalada
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+        return;
+    }
+    // No mostrar si ya se mostró antes
+    if (exitModalShown) {
+        return;
+    }
+    // Mostrar modal
+    if (exitModal) {
+        exitModal.classList.add('show');
+        exitModalShown = true;
+    }
+}
+
+// Detectar cuando el usuario intenta cerrar la página
+document.addEventListener('mouseleave', function(e) {
+    // Solo si el mouse sale por la parte superior (hacia la barra de pestañas)
+    if (e.clientY < 0) {
+        showExitModal();
     }
 });
 
-document.getElementById('installAppBtn').addEventListener('click', function() {
+// Para móviles: detectar cuando el usuario intenta cerrar la pestaña
+document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'hidden') {
+        // Pequeño retraso para no molestar al cambiar de app
+        setTimeout(function() {
+            showExitModal();
+        }, 100);
+    }
+});
+
+// Botón: Instalar app
+exitInstallBtn.addEventListener('click', function() {
     if (deferredPrompt) {
         deferredPrompt.prompt();
         deferredPrompt.userChoice.then(function(choiceResult) {
             if (choiceResult.outcome === 'accepted') {
                 console.log('✅ Usuario aceptó instalar la app');
-                if (installBanner) installBanner.style.display = 'none';
             } else {
                 console.log('❌ Usuario rechazó instalar la app');
             }
             deferredPrompt = null;
+            exitModal.classList.remove('show');
         });
+    } else {
+        // Si no hay evento beforeinstallprompt, mostrar mensaje
+        alert('Para instalar la app, abre esta página en Chrome o Safari y toca "Agregar a pantalla de inicio".');
+        exitModal.classList.remove('show');
     }
 });
 
-if (window.matchMedia('(display-mode: standalone)').matches) {
-    if (installBanner) installBanner.style.display = 'none';
-}
+// Botón: Cerrar y salir
+exitCloseBtn.addEventListener('click', function() {
+    exitModal.classList.remove('show');
+    // Cerrar la página después de un breve momento
+    setTimeout(function() {
+        window.close();
+    }, 300);
+});
 
-window.addEventListener('appinstalled', function() {
-    console.log('✅ App instalada correctamente');
-    if (installBanner) installBanner.style.display = 'none';
+// Cerrar modal haciendo clic fuera
+exitModal.addEventListener('click', function(e) {
+    if (e.target === this) {
+        exitModal.classList.remove('show');
+    }
 });
 
 // ================================================================
@@ -1205,6 +1156,34 @@ window.addEventListener('offline', function() {
         status.classList.add('show');
     }
 });
+
+// ================================================================
+// MENÚ MÓVIL
+// ================================================================
+
+var menuBtn = document.getElementById('menuBtn');
+var mobileMenuOpen = false;
+var mobileMenu = document.createElement('div');
+mobileMenu.id = 'mobileMenu';
+mobileMenu.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(13,59,51,0.98);z-index:999;display:none;flex-direction:column;justify-content:center;align-items:center;gap:24px;padding:20px;';
+mobileMenu.innerHTML = `
+    <button onclick="closeMobileMenu()" style="position:absolute;top:20px;right:24px;background:none;border:none;color:white;font-size:32px;cursor:pointer;">&times;</button>
+    <a href="#mercado" style="color:white;font-size:1.5rem;font-weight:700;text-decoration:none;" onclick="closeMobileMenu()">Mercado</a>
+    <a href="#como-comprar" style="color:white;font-size:1.5rem;font-weight:700;text-decoration:none;" onclick="closeMobileMenu()">Cómo Comprar</a>
+    <a href="#ventajas" style="color:white;font-size:1.5rem;font-weight:700;text-decoration:none;" onclick="closeMobileMenu()">Ventajas</a>
+    <a href="#contacto" style="color:white;font-size:1.5rem;font-weight:700;text-decoration:none;" onclick="closeMobileMenu()">Contacto</a>
+`;
+document.body.appendChild(mobileMenu);
+
+function openMobileMenu() {
+    mobileMenu.style.display = 'flex';
+}
+
+function closeMobileMenu() {
+    mobileMenu.style.display = 'none';
+}
+
+menuBtn.addEventListener('click', openMobileMenu);
 </script>
 
 </body>
