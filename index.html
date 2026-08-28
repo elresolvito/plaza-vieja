@@ -682,7 +682,7 @@
         .cart-float .total { font-weight: 700; font-size: 1rem; }
         
         /* ============================================
-           BOTÓN VOLVER ARRIBA
+           BOTÓN VOLVER ARRIBA - CORREGIDO
            ============================================ */
         #backToTop {
             position: fixed;
@@ -692,15 +692,28 @@
             color: white;
             border: none;
             border-radius: 50%;
-            width: 48px;
-            height: 48px;
-            font-size: 24px;
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.25);
             display: none;
             z-index: 35;
             transition: var(--transition);
             font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            line-height: 1;
+        }
+        #backToTop i {
+            font-size: 22px;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         #backToTop:hover {
             transform: scale(1.1);
@@ -710,8 +723,11 @@
             #backToTop {
                 bottom: 80px;
                 right: 16px;
-                width: 40px;
-                height: 40px;
+                width: 44px;
+                height: 44px;
+                font-size: 16px;
+            }
+            #backToTop i {
                 font-size: 18px;
             }
         }
@@ -951,6 +967,10 @@
             transition: var(--transition);
             margin-top: 12px;
             font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
         .modal-box .btn-whatsapp:hover { background: #1da851; }
         .modal-box .btn-whatsapp:disabled { opacity: 0.5; cursor: not-allowed; }
@@ -1006,6 +1026,117 @@
         }
         
         /* ============================================
+           MODAL DE OPCIONES DE ENVÍO (SMS/WhatsApp)
+           ============================================ */
+        #envioModal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        #envioModal.show {
+            display: flex;
+        }
+        #envioModal .envio-box {
+            background: var(--white);
+            border-radius: 24px;
+            max-width: 400px;
+            width: 100%;
+            padding: 28px 24px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            animation: modalIn 0.3s ease;
+        }
+        #envioModal .envio-box .envio-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        #envioModal .envio-box h2 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+        #envioModal .envio-box p {
+            color: var(--text-medium);
+            font-size: 0.9375rem;
+            margin-bottom: 16px;
+        }
+        #envioModal .envio-box .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        #envioModal .envio-box .btn-whatsapp-envio {
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.0625rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        #envioModal .envio-box .btn-whatsapp-envio:hover {
+            background: #1da851;
+            transform: scale(1.02);
+        }
+        #envioModal .envio-box .btn-sms-envio {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.0625rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        #envioModal .envio-box .btn-sms-envio:hover {
+            background: var(--primary-light);
+            transform: scale(1.02);
+        }
+        #envioModal .envio-box .btn-cancelar-envio {
+            background: transparent;
+            color: var(--text-medium);
+            border: 1px solid #e5e7eb;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9375rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        #envioModal .envio-box .btn-cancelar-envio:hover {
+            background: #f3f4f6;
+        }
+        #envioModal .envio-box .envio-note {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 12px;
+        }
+        #envioModal .envio-box .envio-note i {
+            margin-right: 4px;
+        }
+        
+        /* ============================================
            UTILIDADES
            ============================================ */
         .hidden { display: none !important; }
@@ -1050,6 +1181,8 @@
             .exit-modal-box h2 { font-size: 1.25rem; }
             .footer-qr .qr-box img { width: 100px; height: 100px; }
             #qrModal .modal-box .qr-large img { width: 160px; height: 160px; }
+            #envioModal .envio-box { padding: 20px 16px; }
+            #envioModal .envio-box h2 { font-size: 1.1rem; }
         }
     </style>
 </head>
@@ -1281,7 +1414,9 @@ MODAL DE CARRITO (OCULTO)
         <h2>Tu Carrito</h2>
         <div id="cartItems"><p style="text-align:center;color:var(--text-medium);">Tu carrito está vacío</p></div>
         <div class="cart-total" id="cartTotalDisplay">Total: $0</div>
-        <button class="btn-whatsapp" id="sendWhatsAppBtn" onclick="sendOrder()" disabled><i class="fab fa-whatsapp"></i> Enviar Pedido por WhatsApp</button>
+        <button class="btn-whatsapp" id="sendWhatsAppBtn" onclick="sendOrder()" disabled>
+            <i class="fas fa-send"></i> Enviar Pedido
+        </button>
     </div>
 </div>
 
@@ -1300,10 +1435,10 @@ CARRITO FLOTANTE
 </button>
 
 <!-- ============================================
-BOTÓN VOLVER ARRIBA
+BOTÓN VOLVER ARRIBA - CORREGIDO
 ============================================ -->
-<button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-    <i class="fas fa-arrow-up"></i>
+<button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Volver arriba">
+    <i class="fas fa-chevron-up"></i>
 </button>
 
 <!-- ============================================
@@ -1458,6 +1593,19 @@ window.addEventListener('offline', function() {
         status.textContent = '📶 Sin conexión - Modo offline';
         status.classList.add('offline');
         status.classList.add('show');
+    }
+});
+
+// ================================================================
+// MOSTRAR BOTÓN VOLVER ARRIBA
+// ================================================================
+
+window.addEventListener('scroll', function() {
+    var btn = document.getElementById('backToTop');
+    if (window.scrollY > 400) {
+        btn.style.display = 'flex';
+    } else {
+        btn.style.display = 'none';
     }
 });
 
