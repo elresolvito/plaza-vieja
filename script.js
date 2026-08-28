@@ -1,5 +1,5 @@
 // ================================================================
-// PLAZA VIEJA - SCRIPT COMPLETO
+// PLAZA VIEJA - SCRIPT COMPLETO CON REGISTRO EN GOOGLE SHEETS
 // ================================================================
 
 // ================================================================
@@ -400,7 +400,33 @@ function closeCartModal() {
 }
 
 // ================================================================
-// 7. ENVIAR PEDIDO POR WHATSAPP O SMS
+// 7. ENVIAR A GOOGLE SHEETS
+// ================================================================
+
+function enviarAGoogleSheets(telefono, productos, total, peso) {
+    var url = 'https://script.google.com/macros/s/AKfycbzm8TTL_EYqq-5N6XNMg7u3mdOlbUEwfp8jCxo7g1NxFqRfydniWuJEcgPoR_bw7as3/exec';
+    
+    var data = {
+        telefono: telefono,
+        productos: productos,
+        total: total,
+        peso: peso
+    };
+    
+    fetch(url, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    }).then(function() {
+        console.log('✅ Pedido enviado a Google Sheets');
+    }).catch(function(error) {
+        console.log('⚠️ Error al enviar a Google Sheets:', error);
+    });
+}
+
+// ================================================================
+// 8. ENVIAR PEDIDO POR WHATSAPP O SMS
 // ================================================================
 
 function sendOrder() {
@@ -409,10 +435,27 @@ function sendOrder() {
         return;
     }
 
+    // Obtener teléfono del cliente
+    var telefonoInput = document.getElementById('clienteTelefono');
+    var telefonoCliente = telefonoInput ? telefonoInput.value.trim() : '';
+    
+    if (!telefonoCliente || telefonoCliente.length < 8) {
+        showToast('⚠️ Ingresa tu número de teléfono para continuar');
+        if (telefonoInput) telefonoInput.focus();
+        return;
+    }
+
     var total = getTotal();
     var pesoTotal = cart.reduce(function(s, i) {
         return s + (i.weight || 0.5) * i.quantity;
     }, 0);
+
+    // Enviar a Google Sheets
+    var listaProductos = cart.map(function(item) {
+        return item.name + ' x' + item.quantity;
+    }).join(', ');
+    
+    enviarAGoogleSheets(telefonoCliente, listaProductos, total.toFixed(2), pesoTotal.toFixed(1));
 
     var numeroPedido = Math.floor(1000 + Math.random() * 9000);
     var fecha = new Date().toLocaleString('es-CU');
@@ -427,7 +470,7 @@ function sendOrder() {
     mensaje += '%0A📦 *Peso aprox: ' + pesoTotal.toFixed(1) + ' kg*';
     mensaje += '%0A%0A--- *DATOS DEL CLIENTE* ---';
     mensaje += '%0A📍 *Dirección:* (Confirma)';
-    mensaje += '%0A📞 *Teléfono:* (Confirma)';
+    mensaje += '%0A📞 *Teléfono:* ' + telefonoCliente;
     mensaje += '%0A💳 *Pago:* (Efectivo / Transferencia)';
     mensaje += '%0A%0A⏰ *Entregamos en el día (9am - 8pm)*';
     mensaje += '%0A%0A✅ *¡Gracias por tu compra!*';
@@ -496,7 +539,7 @@ function cerrarModalEnvio() {
 }
 
 // ================================================================
-// 8. TOAST Y ANIMACIONES
+// 9. TOAST Y ANIMACIONES
 // ================================================================
 
 var toastTimeout;
@@ -520,7 +563,7 @@ function shakeCart() {
 }
 
 // ================================================================
-// 9. DETECCIÓN DE CAMBIOS - Actualizar caché automáticamente
+// 10. DETECCIÓN DE CAMBIOS - Actualizar caché automáticamente
 // ================================================================
 
 function checkForUpdates() {
@@ -541,7 +584,7 @@ document.addEventListener('visibilitychange', function() {
 });
 
 // ================================================================
-// 10. INICIALIZACIÓN
+// 11. INICIALIZACIÓN
 // ================================================================
 
 document.addEventListener('DOMContentLoaded', function() {
