@@ -26,14 +26,14 @@ var products = [
     { 
         id: 101, 
         name: "Chorizo Extra Vela", 
-        image: "productos/Chorizo extra vela 1.6 kilos 17000.png", 
+        image: "productos/chorizo-extra-1.6kg-17000.png", 
         desc: "Chorizo extra vela de alta calidad, sabor intenso y ahumado.", 
         category: "Embutidos" 
     },
     { 
         id: 102, 
         name: "Jamón Serrano Deshuesado", 
-        image: "productos/Jamón Serrano deshuesado 5 a 5.5 libras 49000.png", 
+        image: "productos/jamon-serrano-5lb-49000.png", 
         desc: "Jamón serrano deshuesado, corte fino y sabor tradicional.", 
         category: "Embutidos", 
         tag: "nuevo" 
@@ -41,14 +41,14 @@ var products = [
     { 
         id: 103, 
         name: "Jamón Rápido", 
-        image: "productos/jamon-rapido-2kg-10000.png", 
+        image: "productos/jamon-rapido-2kg-9000.png", 
         desc: "Jamón rápido, práctico y versátil para el consumo diario.", 
         category: "Embutidos" 
     },
     { 
         id: 104, 
         name: "Jamón Barra", 
-        image: "productos/Jamón barra 2 kilos 10000.png", 
+        image: "productos/jamon-barra-2kg-9000.png", 
         desc: "Jamón en barra, ideal para lonchear y preparar sándwiches.", 
         category: "Embutidos" 
     },
@@ -57,7 +57,7 @@ var products = [
     { 
         id: 201, 
         name: "Beicon Laminado 1kg", 
-        image: "productos/Beicon laminado 1 kilo 9000.png", 
+        image: "productos/beicon-laminado-1kg-9000.png", 
         desc: "Beicon laminado en finas lonchas, perfecto para desayunos.", 
         category: "Beicones", 
         tag: "oferta" 
@@ -65,21 +65,21 @@ var products = [
     { 
         id: 202, 
         name: "Beicon Laminado 2kg", 
-        image: "productos/Beicon laminado de 2 kilos 17000.png", 
+        image: "productos/beicon-laminado-2kg-17000.png", 
         desc: "Beicon laminado en lonchas, formato económico.", 
         category: "Beicones" 
     },
     { 
         id: 203, 
         name: "Beicon Troceado Lasqueado", 
-        image: "productos/Beicon troceado Lasqueado 3 kilos 17000.png", 
+        image: "productos/beicon-troceado-3kg-17000.png", 
         desc: "Beicon troceado y lasqueado, ideal para guisos.", 
         category: "Beicones" 
     },
     { 
         id: 204, 
         name: "Beicon Molde Natural", 
-        image: "productos/Beicon molde natural de 5 kilos 29000.png", 
+        image: "productos/beicon-molde-5kg-29000.png", 
         desc: "Beicon en molde natural, sabor auténtico.", 
         category: "Beicones" 
     },
@@ -102,7 +102,7 @@ var products = [
     { 
         id: 303, 
         name: "Queso Azul", 
-        image: "productos/Queso azul 3 kilos 31000.png", 
+        image: "productos/queso-azul-3kg-31000.png", 
         desc: "Queso azul de sabor fuerte y con carácter.", 
         category: "Quesos", 
         tag: "nuevo" 
@@ -110,7 +110,7 @@ var products = [
     { 
         id: 304, 
         name: "Queso de Cabra con Miel", 
-        image: "productos/Queso de cabra valle de San Juan con crema de miel 3.5 kilos 25000.png", 
+        image: "productos/queso-cabra-miel-3.5kg-25000.png", 
         desc: "Exquisito queso de cabra del Valle de San Juan con miel.", 
         category: "Quesos", 
         tag: "oferta" 
@@ -400,34 +400,99 @@ function closeCartModal() {
 }
 
 // ================================================================
-// 7. ENVIAR PEDIDO POR WHATSAPP
+// 7. ENVIAR PEDIDO POR WHATSAPP O SMS
 // ================================================================
 
 function sendOrder() {
-    if (cart.length === 0) return;
-    
+    if (cart.length === 0) {
+        showToast('❌ El carrito está vacío');
+        return;
+    }
+
     var total = getTotal();
     var pesoTotal = cart.reduce(function(s, i) {
         return s + (i.weight || 0.5) * i.quantity;
     }, 0);
-    
-    var msg = '🛒 *NUEVO PEDIDO - PLAZA VIEJA*%0A%0A';
-    msg += '📋 *PRODUCTOS:*%0A';
+
+    var numeroPedido = Math.floor(1000 + Math.random() * 9000);
+    var fecha = new Date().toLocaleString('es-CU');
+
+    var mensaje = '🛒 *NUEVO PEDIDO #' + numeroPedido + '*%0A';
+    mensaje += '📅 ' + fecha + '%0A%0A';
+    mensaje += '📋 *PRODUCTOS:*%0A';
     cart.forEach(function(item) {
-        msg += '  • ' + item.name + ' × ' + item.quantity + ' = $' + (item.price * item.quantity).toLocaleString() + '%0A';
+        mensaje += '  • ' + item.name + ' × ' + item.quantity + ' = $' + (item.price * item.quantity).toLocaleString() + '%0A';
     });
-    msg += '%0A💰 *Total: $' + total.toLocaleString() + ' CUP*';
-    msg += '%0A📦 *Peso aprox: ' + pesoTotal.toFixed(1) + ' kg*';
-    msg += '%0A%0A--- DATOS DEL CLIENTE ---';
-    msg += '%0A📍 *Dirección:* (Pendiente de confirmar)';
-    msg += '%0A📞 *Teléfono:* (Pendiente de confirmar)';
-    msg += '%0A⏰ *Horario preferido:* (Mañana / Tarde)';
-    msg += '%0A💳 *Pago:* (Efectivo / Transferencia)';
-    msg += '%0A%0A📌 *El administrador confirmará los datos y coordinará la entrega.*';
+    mensaje += '%0A💰 *Total: $' + total.toLocaleString() + ' CUP*';
+    mensaje += '%0A📦 *Peso aprox: ' + pesoTotal.toFixed(1) + ' kg*';
+    mensaje += '%0A%0A--- *DATOS DEL CLIENTE* ---';
+    mensaje += '%0A📍 *Dirección:* (Confirma)';
+    mensaje += '%0A📞 *Teléfono:* (Confirma)';
+    mensaje += '%0A💳 *Pago:* (Efectivo / Transferencia)';
+    mensaje += '%0A%0A⏰ *Entregamos en el día (9am - 8pm)*';
+    mensaje += '%0A%0A✅ *¡Gracias por tu compra!*';
+
+    mostrarOpcionesEnvio(mensaje);
+}
+
+function mostrarOpcionesEnvio(mensaje) {
+    var modal = document.createElement('div');
+    modal.id = 'envioModal';
+    modal.className = 'show';
+    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeInExit 0.3s ease;';
+    modal.innerHTML = `
+        <div class="envio-box">
+            <div class="envio-icon">📱</div>
+            <h2>¿Cómo quieres enviar tu pedido?</h2>
+            <p>Elige la opción que mejor funcione en tu zona.</p>
+            
+            <div class="btn-group">
+                <button class="btn-whatsapp-envio" onclick="enviarPorWhatsApp('${encodeURIComponent(mensaje)}')">
+                    <i class="fab fa-whatsapp"></i> WhatsApp (Con datos)
+                </button>
+                <button class="btn-sms-envio" onclick="enviarPorSMS('${encodeURIComponent(mensaje)}')">
+                    <i class="fas fa-sms"></i> SMS (Sin datos)
+                </button>
+                <button class="btn-cancelar-envio" onclick="cerrarModalEnvio()">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+            </div>
+            
+            <p class="envio-note">
+                <i class="fas fa-info-circle"></i> SMS funciona sin conexión a internet
+            </p>
+        </div>
+    `;
+    document.body.appendChild(modal);
     
-    var url = 'https://wa.me/5356382909?text=' + msg;
+    modal.addEventListener('click', function(e) {
+        if (e.target === this) cerrarModalEnvio();
+    });
+}
+
+function enviarPorWhatsApp(mensaje) {
+    var url = 'https://wa.me/5356382909?text=' + mensaje;
     window.open(url, '_blank');
+    cerrarModalEnvio();
     closeCartModal();
+}
+
+function enviarPorSMS(mensaje) {
+    var textoDecodificado = decodeURIComponent(mensaje);
+    var url = 'sms:5356382909?body=' + encodeURIComponent(textoDecodificado);
+    window.open(url, '_blank');
+    setTimeout(function() {
+        showToast('📱 Si no se abre, copia el mensaje y pégalo en SMS');
+    }, 1000);
+    cerrarModalEnvio();
+    closeCartModal();
+}
+
+function cerrarModalEnvio() {
+    var modal = document.getElementById('envioModal');
+    if (modal) {
+        modal.remove();
+    }
 }
 
 // ================================================================
@@ -508,15 +573,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var header = document.getElementById('mainHeader');
     window.addEventListener('scroll', function() {
         if (header) header.classList.toggle('scrolled', window.scrollY > 80);
-        showBackToTop();
     });
-    
-    function showBackToTop() {
-        var btn = document.getElementById('backToTop');
-        if (!btn) return;
-        btn.style.display = window.scrollY > 400 ? 'flex' : 'none';
-    }
-    showBackToTop();
     
     if ('IntersectionObserver' in window) {
         var observer = new IntersectionObserver(function(entries) {
@@ -529,6 +586,5 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Iniciar verificación de actualizaciones
     setTimeout(checkForUpdates, 5000);
 });
