@@ -22,7 +22,7 @@ function extractWeight(filename) {
 }
 
 // ================================================================
-// PRODUCTOS - NOMBRES CORRECTOS
+// PRODUCTOS - CON LOS NOMBRES EXACTOS DE TUS ARCHIVOS
 // ================================================================
 
 var products = [
