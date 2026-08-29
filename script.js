@@ -22,7 +22,7 @@ function extractWeight(filename) {
 }
 
 // ================================================================
-// PRODUCTOS - CON LOS NOMBRES REALES DE TUS ARCHIVOS
+// PRODUCTOS - NOMBRES CORRECTOS
 // ================================================================
 
 var products = [
@@ -162,7 +162,7 @@ products.sort(function(a, b) {
 });
 
 // ================================================================
-// 2. CARRITO CON PERSISTENCIA
+// 2. CARRITO
 // ================================================================
 
 function loadCart() {
@@ -463,7 +463,6 @@ function sendOrder() {
         return;
     }
 
-    // Obtener teléfono del cliente
     var telefonoInput = document.getElementById('clienteTelefono');
     var telefonoCliente = telefonoInput ? telefonoInput.value.trim() : '';
     
@@ -478,7 +477,6 @@ function sendOrder() {
         return s + (i.weight || 0.5) * i.quantity;
     }, 0);
 
-    // Enviar a Google Sheets
     var listaProductos = cart.map(function(item) {
         return item.name + ' x' + item.quantity;
     }).join(', ');
@@ -591,7 +589,7 @@ function shakeCart() {
 }
 
 // ================================================================
-// 10. DETECCIÓN DE CAMBIOS - Actualizar caché automáticamente
+// 10. DETECCIÓN DE CAMBIOS
 // ================================================================
 
 function checkForUpdates() {
