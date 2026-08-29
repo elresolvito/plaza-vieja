@@ -7,6 +7,18 @@
     <meta name="description" content="Encuentra embutidos, quesos y más en Plaza Vieja. Haz tu pedido online y recíbelo en La Habana.">
     
     <!-- ============================================
+    CONTROL DE CACHÉ - SOLO PARA HTML
+    ============================================ -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <!-- ============================================
+    IMÁGENES: Guardar en caché por mucho tiempo
+    ============================================ -->
+    <meta http-equiv="Cache-Control" content="public, max-age=31536000, immutable">
+    
+    <!-- ============================================
     PWA - MANIFEST Y CONFIGURACIÓN
     ============================================ -->
     <link rel="manifest" href="/plaza-vieja/manifest.json">
@@ -302,7 +314,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: url('productos/beicon-laminado-1kg-9000.png') center/cover no-repeat;
+            background: url('productos/Beicon laminado 1 kilo 9000.png') center/cover no-repeat;
             opacity: 0.1;
         }
         .hero-content {
@@ -682,7 +694,7 @@
         .cart-float .total { font-weight: 700; font-size: 1rem; }
         
         /* ============================================
-           BOTÓN VOLVER ARRIBA - CORREGIDO
+           BOTÓN VOLVER ARRIBA
            ============================================ */
         #backToTop {
             position: fixed;
@@ -1483,16 +1495,39 @@ CARRITO FLOTANTE
 </button>
 
 <!-- ============================================
-BOTÓN VOLVER ARRIBA - CORREGIDO
+BOTÓN VOLVER ARRIBA
 ============================================ -->
 <button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Volver arriba">
     <i class="fas fa-chevron-up"></i>
 </button>
 
 <!-- ============================================
-SCRIPT
+CARGA DE SCRIPTS CON VERSIÓN AUTOMÁTICA
 ============================================ -->
-<script src="script.js"></script>
+<script>
+    // Versión dinámica - cambia cuando subes cambios
+    // ================================================================
+    // IMPORTANTE: Cambia este número CADA VEZ que subas cambios
+    // para que los usuarios vean la versión más reciente
+    // ================================================================
+    const APP_VERSION = 6; // <--- INCREMENTA ESTE NÚMERO CON CADA ACTUALIZACIÓN
+    
+    // Cargar script con versión
+    document.write('<script src="script.js?v=' + APP_VERSION + '"><\/script>');
+</script>
+
+<!-- Script de control de caché -->
+<script>
+    // Verificar si el usuario tiene la versión correcta
+    const savedVersion = localStorage.getItem('plazaVersion');
+    if (savedVersion && savedVersion !== String(APP_VERSION)) {
+        console.log('🔄 Nueva versión disponible (' + APP_VERSION + '). Recargando...');
+        localStorage.setItem('plazaVersion', APP_VERSION);
+        window.location.reload(true);
+    } else {
+        localStorage.setItem('plazaVersion', APP_VERSION);
+    }
+</script>
 
 <script>
 // ================================================================
