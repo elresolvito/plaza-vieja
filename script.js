@@ -45,7 +45,7 @@ var products = [
     { 
         id: 103, 
         name: "Jamón Rápido", 
-        image: "productos/jamón-rápido-2kg-10000.png", 
+        image: "productos/jamón-rapido-2kg-10000.png", 
         desc: "Jamón rápido, práctico y versátil para el consumo diario.", 
         category: "Embutidos" 
     },
@@ -66,7 +66,7 @@ var products = [
     { 
         id: 106, 
         name: "Salchichón", 
-        image: "productos/salchichón 2 kg 16000.jpg", 
+        image: "productos/salchichon 2 kg 16000.jpg", 
         desc: "Salchichón curado, ideal para picar y compartir.", 
         category: "Embutidos" 
     },
