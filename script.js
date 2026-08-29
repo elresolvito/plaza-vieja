@@ -45,7 +45,7 @@ var products = [
     { 
         id: 103, 
         name: "Jamón Rápido", 
-        image: "productos/jamón-rapido-2kg-10000.png", 
+        image: "productos/jamon-rapido-2kg-10000.png", 
         desc: "Jamón rápido, práctico y versátil para el consumo diario.", 
         category: "Embutidos" 
     },
