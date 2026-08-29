@@ -432,7 +432,7 @@ function closeCartModal() {
 // ================================================================
 
 function enviarAGoogleSheets(telefono, productos, total, peso) {
-    var url = 'https://script.google.com/macros/s/AKfycbzm8TTL_EYqq-5N6XNMg7u3mdOlbUEwfp8jCxo7g1NxFqRfydniWuJEcgPoR_bw7as3/exec';
+    var url = 'https://script.google.com/macros/s/AKfycbzmU14gYRII7svWqRhJ-ifZQSYPan1ysj169pr49BDaRRIX2X1R8yH-YokKOqpmyMX8/exec';
     
     var data = {
         telefono: telefono,
