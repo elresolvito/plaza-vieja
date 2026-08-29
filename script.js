@@ -1,5 +1,5 @@
 // ================================================================
-// PLAZA VIEJA - SCRIPT COMPLETO CON REGISTRO EN GOOGLE SHEETS
+// PLAZA VIEJA - SCRIPT COMPLETO
 // ================================================================
 
 // ================================================================
@@ -21,19 +21,23 @@ function extractWeight(filename) {
     return null;
 }
 
+// ================================================================
+// PRODUCTOS - CON LOS NOMBRES REALES DE TUS ARCHIVOS
+// ================================================================
+
 var products = [
     // === EMBUTIDOS ===
     { 
         id: 101, 
         name: "Chorizo Extra Vela", 
-        image: "productos/chorizo-extra-1.6kg-17000.png", 
+        image: "productos/Chorizo extra vela 1.6 kilos 17000.png", 
         desc: "Chorizo extra vela de alta calidad, sabor intenso y ahumado.", 
         category: "Embutidos" 
     },
     { 
         id: 102, 
         name: "Jamón Serrano Deshuesado", 
-        image: "productos/jamon-serrano-5lb-49000.png", 
+        image: "productos/Jamón Serrano deshuesado 5 a 5.5 libras 49000.png", 
         desc: "Jamón serrano deshuesado, corte fino y sabor tradicional.", 
         category: "Embutidos", 
         tag: "nuevo" 
@@ -41,23 +45,37 @@ var products = [
     { 
         id: 103, 
         name: "Jamón Rápido", 
-        image: "productos/jamon-rapido-2kg-9000.png", 
+        image: "productos/jamón-rápido-2kg-10000.png", 
         desc: "Jamón rápido, práctico y versátil para el consumo diario.", 
         category: "Embutidos" 
     },
     { 
         id: 104, 
         name: "Jamón Barra", 
-        image: "productos/jamon-barra-2kg-9000.png", 
+        image: "productos/Jamón barra 2 kilos 10000.png", 
         desc: "Jamón en barra, ideal para lonchear y preparar sándwiches.", 
         category: "Embutidos" 
     },
-    
+    { 
+        id: 105, 
+        name: "Chorizo Vela Bravo", 
+        image: "productos/chorizo vela bravo 14500.png", 
+        desc: "Chorizo vela bravo, sabor intenso y tradicional.", 
+        category: "Embutidos" 
+    },
+    { 
+        id: 106, 
+        name: "Salchichón", 
+        image: "productos/salchichón 2 kg 16000.jpg", 
+        desc: "Salchichón curado, ideal para picar y compartir.", 
+        category: "Embutidos" 
+    },
+
     // === BEICONES ===
     { 
         id: 201, 
         name: "Beicon Laminado 1kg", 
-        image: "productos/beicon-laminado-1kg-9000.png", 
+        image: "productos/Beicon laminado 1 kilo 9000.png", 
         desc: "Beicon laminado en finas lonchas, perfecto para desayunos.", 
         category: "Beicones", 
         tag: "oferta" 
@@ -65,25 +83,25 @@ var products = [
     { 
         id: 202, 
         name: "Beicon Laminado 2kg", 
-        image: "productos/beicon-laminado-2kg-17000.png", 
+        image: "productos/Beicon laminado de 2 kilos 17000.png", 
         desc: "Beicon laminado en lonchas, formato económico.", 
         category: "Beicones" 
     },
     { 
         id: 203, 
         name: "Beicon Troceado Lasqueado", 
-        image: "productos/beicon-troceado-3kg-17000.png", 
+        image: "productos/Beicon troceado Lasqueado 3 kilos 17000.png", 
         desc: "Beicon troceado y lasqueado, ideal para guisos.", 
         category: "Beicones" 
     },
     { 
         id: 204, 
         name: "Beicon Molde Natural", 
-        image: "productos/beicon-molde-5kg-29000.png", 
+        image: "productos/Beicon molde natural de 5 kilos 29000.png", 
         desc: "Beicon en molde natural, sabor auténtico.", 
         category: "Beicones" 
     },
-    
+
     // === QUESOS ===
     { 
         id: 301, 
@@ -102,7 +120,7 @@ var products = [
     { 
         id: 303, 
         name: "Queso Azul", 
-        image: "productos/queso-azul-3kg-31000.png", 
+        image: "productos/Queso azul 3 kilos 31000.png", 
         desc: "Queso azul de sabor fuerte y con carácter.", 
         category: "Quesos", 
         tag: "nuevo" 
@@ -110,10 +128,20 @@ var products = [
     { 
         id: 304, 
         name: "Queso de Cabra con Miel", 
-        image: "productos/queso-cabra-miel-3.5kg-25000.png", 
+        image: "productos/Queso de cabra valle de San Juan con crema de miel 3.5 kilos 25000.png", 
         desc: "Exquisito queso de cabra del Valle de San Juan con miel.", 
         category: "Quesos", 
         tag: "oferta" 
+    },
+
+    // === PESCADOS ===
+    { 
+        id: 401, 
+        name: "Salmón Ahumado", 
+        image: "productos/Salmón ahumado 1 kilo 17000.png", 
+        desc: "Salmón ahumado de alta calidad, ideal para entradas y platos gourmet.", 
+        category: "Pescados", 
+        tag: "nuevo" 
     }
 ];
 
