@@ -123,7 +123,7 @@ var products = [
         image: "productos/Queso azul 3 kilos 31000.png", 
         desc: "Queso azul de sabor fuerte y con carácter.", 
         category: "Quesos", 
-        tag: "nuevo" 
+        tag: "agotado" 
     },
     { 
         id: 304, 
