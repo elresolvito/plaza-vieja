@@ -431,11 +431,11 @@ function closeCartModal() {
 }
 
 // ================================================================
-// 7. ENVIAR A GOOGLE SHEETS - CORREGIDO (CORS)
+// 7. ENVIAR A GOOGLE SHEETS - URL CORRECTA
 // ================================================================
 
 function enviarAGoogleSheets(telefono, productos, total, peso) {
-    var url = 'https://script.google.com/macros/s/AKfycbwi5Hn5Xnoy_uRC2zLeVxcipV_Rb8D2HOKAu9hV0NP7YrvfXEknHDVcXy7W8aZjYZdB/exec';
+    var url = 'https://script.google.com/macros/s/AKfycbxBKAgrAqTYbtA67MoEAwTKmyKug9Idx_eT8Cd5u9El2bFeLcO7Hp_gQxPuRFYjTKjY/exec';
     
     var data = {
         telefono: telefono,
@@ -445,8 +445,8 @@ function enviarAGoogleSheets(telefono, productos, total, peso) {
     };
     
     console.log('📤 Enviando a Google Sheets:', data);
+    console.log('📤 URL:', url);
     
-    // Usamos 'no-cors' para evitar problemas de CORS
     fetch(url, {
         method: 'POST',
         mode: 'no-cors',
@@ -456,7 +456,7 @@ function enviarAGoogleSheets(telefono, productos, total, peso) {
         body: JSON.stringify(data)
     })
     .then(function() {
-        console.log('✅ Pedido enviado a Google Sheets (no-cors)');
+        console.log('✅ Pedido enviado a Google Sheets');
     })
     .catch(function(error) {
         console.warn('⚠️ Error al enviar a Google Sheets:', error);
@@ -507,8 +507,8 @@ function obtenerMensajePedido() {
     mensaje += '\n📍 *Dirección:* (Confirma)';
     mensaje += '\n📞 *Teléfono:* ' + telefonoCliente;
     mensaje += '\n💳 *Pago:* (Efectivo / Transferencia)';
-    mensaje += '\n\n⏰ *Entregamos en el día (9am - 6pm)*';
-    mensaje += '\n\n✅ *El administrador confirmará los datos y coordinará la entrega*';
+    mensaje += '\n\n⏰ *Entregamos en el día (9am - 8pm)*';
+    mensaje += '\n\n✅ *¡Gracias por tu compra!*';
 
     return mensaje;
 }
@@ -566,7 +566,43 @@ function shakeCart() {
 }
 
 // ================================================================
-// 10. DETECCIÓN DE CAMBIOS
+// 10. VERIFICAR ACTUALIZACIONES PERIÓDICAMENTE
+// ================================================================
+
+function verificarActualizaciones() {
+    setInterval(function() {
+        fetch('/plaza-vieja/index.html?' + Date.now())
+            .then(function(response) {
+                return response.text();
+            })
+            .then(function(html) {
+                var match = html.match(/const APP_VERSION = (\d+);/);
+                if (match) {
+                    var nuevaVersion = parseInt(match[1]);
+                    var versionActual = parseInt(localStorage.getItem('appVersion')) || 0;
+                    
+                    if (nuevaVersion > versionActual) {
+                        console.log('🔄 Nueva versión detectada (' + nuevaVersion + '). Actualizando...');
+                        localStorage.setItem('appVersion', nuevaVersion);
+                        
+                        if ('serviceWorker' in navigator) {
+                            navigator.serviceWorker.ready.then(function(registration) {
+                                registration.active.postMessage('skipWaiting');
+                            });
+                        }
+                        
+                        setTimeout(function() {
+                            window.location.reload(true);
+                        }, 2000);
+                    }
+                }
+            })
+            .catch(function(error) {});
+    }, 600000);
+}
+
+// ================================================================
+// 11. DETECCIÓN DE CAMBIOS
 // ================================================================
 
 function checkForUpdates() {
@@ -587,7 +623,7 @@ document.addEventListener('visibilitychange', function() {
 });
 
 // ================================================================
-// 11. INICIALIZACIÓN
+// 12. INICIALIZACIÓN
 // ================================================================
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -633,4 +669,5 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     setTimeout(checkForUpdates, 5000);
+    setTimeout(verificarActualizaciones, 30000);
 });
