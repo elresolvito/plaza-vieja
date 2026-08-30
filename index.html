@@ -1285,7 +1285,7 @@ FOOTER CON QR
         <div class="social">
             <a href="https://wa.me/5356382909?text=¡Hola!%20Quiero%20hacer%20un%20pedido." target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
         </div>
-        <p>&copy; 2026 Plaza Vieja. Todos los derechos reservados.</p>
+        <p>&copy; 2024 Plaza Vieja. Todos los derechos reservados.</p>
         
         <!-- Sección QR en el footer -->
         <div class="footer-qr">
@@ -1443,10 +1443,40 @@ BOTÓN VOLVER ARRIBA
 </button>
 
 <!-- ============================================
-CARGA DE SCRIPTS CON VERSIÓN AUTOMÁTICA
+DETECTOR DE ACTUALIZACIONES - APP INSTALADA
 ============================================ -->
 <script>
-    const APP_VERSION = 8;
+    // ================================================================
+    // VERSIÓN DE LA APP - CAMBIA ESTE NÚMERO CON CADA ACTUALIZACIÓN
+    // ================================================================
+    const APP_VERSION = 12;
+    
+    // Verificar si hay una nueva versión
+    const currentVersion = localStorage.getItem('appVersion');
+    
+    if (currentVersion && currentVersion !== String(APP_VERSION)) {
+        console.log('🔄 Nueva versión disponible. Actualizando app...');
+        localStorage.setItem('appVersion', APP_VERSION);
+        
+        // Limpiar caché del Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                registrations.forEach(function(registration) {
+                    registration.unregister();
+                    console.log('🗑️ Service Worker antiguo eliminado');
+                });
+            });
+        }
+        
+        // Recargar con limpieza de caché
+        window.location.reload(true);
+    } else if (!currentVersion) {
+        localStorage.setItem('appVersion', APP_VERSION);
+    }
+</script>
+
+<!-- Script con versión -->
+<script>
     document.write('<script src="script.js?v=' + APP_VERSION + '"><\/script>');
 </script>
 
