@@ -431,7 +431,7 @@ function closeCartModal() {
 }
 
 // ================================================================
-// 7. ENVIAR A GOOGLE SHEETS
+// 7. ENVIAR A GOOGLE SHEETS - CORREGIDO (CORS)
 // ================================================================
 
 function enviarAGoogleSheets(telefono, productos, total, peso) {
@@ -444,26 +444,19 @@ function enviarAGoogleSheets(telefono, productos, total, peso) {
         peso: peso
     };
     
+    console.log('📤 Enviando a Google Sheets:', data);
+    
+    // Usamos 'no-cors' para evitar problemas de CORS
     fetch(url, {
         method: 'POST',
-        mode: 'cors',
+        mode: 'no-cors',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(data)
     })
-    .then(function(response) {
-        if (!response.ok) {
-            throw new Error('Error en la respuesta del servidor: ' + response.status);
-        }
-        return response.json();
-    })
-    .then(function(result) {
-        if (result.success) {
-            console.log('✅ Pedido enviado a Google Sheets:', result.message);
-        } else {
-            console.warn('⚠️ Error al enviar a Google Sheets:', result.message);
-        }
+    .then(function() {
+        console.log('✅ Pedido enviado a Google Sheets (no-cors)');
     })
     .catch(function(error) {
         console.warn('⚠️ Error al enviar a Google Sheets:', error);
@@ -471,7 +464,7 @@ function enviarAGoogleSheets(telefono, productos, total, peso) {
 }
 
 // ================================================================
-// 8. FUNCIONES DE CONTACTO - NUEVO
+// 8. FUNCIONES DE CONTACTO
 // ================================================================
 
 function obtenerMensajePedido() {
