@@ -123,7 +123,7 @@ var products = [
         image: "productos/Queso azul 3 kilos 31000.png", 
         desc: "Queso azul de sabor fuerte y con carácter.", 
         category: "Quesos", 
-        tag: "agotado" 
+        tag: "nuevo" 
     },
     { 
         id: 304, 
@@ -235,14 +235,16 @@ function updateUI() {
     if (floatTotal) floatTotal.textContent = '$' + total.toLocaleString();
     
     var container = document.getElementById('cartItems');
-    var sendBtn = document.getElementById('sendWhatsAppBtn');
+    var sendWhatsAppBtn = document.getElementById('sendWhatsAppBtn');
+    var sendSmsBtn = document.getElementById('sendSmsBtn');
     var totalDisplay = document.getElementById('cartTotalDisplay');
     
     if (!container) return;
     
     if (cart.length === 0) {
         container.innerHTML = '<p style="text-align:center;color:var(--text-medium);">Tu carrito está vacío</p>';
-        if (sendBtn) sendBtn.disabled = true;
+        if (sendWhatsAppBtn) sendWhatsAppBtn.disabled = true;
+        if (sendSmsBtn) sendSmsBtn.disabled = true;
         if (totalDisplay) totalDisplay.textContent = 'Total: $0';
         return;
     }
@@ -260,7 +262,8 @@ function updateUI() {
     }).join('');
     
     if (totalDisplay) totalDisplay.textContent = 'Total: $' + total.toLocaleString();
-    if (sendBtn) sendBtn.disabled = false;
+    if (sendWhatsAppBtn) sendWhatsAppBtn.disabled = false;
+    if (sendSmsBtn) sendSmsBtn.disabled = false;
 }
 
 // ================================================================
@@ -432,7 +435,7 @@ function closeCartModal() {
 // ================================================================
 
 function enviarAGoogleSheets(telefono, productos, total, peso) {
-    var url = 'https://script.google.com/macros/s/AKfycbxX7YUEtz2tbni0JhyJVZ5gVx74uEQC2Mk2xVOVhJYQrrVRc-cSuawQKS0LTJQxe9oj/exec';
+    var url = 'https://script.google.com/macros/s/AKfycbzm8TTL_EYqq-5N6XNMg7u3mdOlbUEwfp8jCxo7g1NxFqRfydniWuJEcgPoR_bw7as3/exec';
     
     var data = {
         telefono: telefono,
@@ -443,24 +446,37 @@ function enviarAGoogleSheets(telefono, productos, total, peso) {
     
     fetch(url, {
         method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json'
+        },
         body: JSON.stringify(data)
-    }).then(function() {
-        console.log('✅ Pedido enviado a Google Sheets');
-    }).catch(function(error) {
-        console.log('⚠️ Error al enviar a Google Sheets:', error);
+    })
+    .then(function(response) {
+        if (!response.ok) {
+            throw new Error('Error en la respuesta del servidor: ' + response.status);
+        }
+        return response.json();
+    })
+    .then(function(result) {
+        if (result.success) {
+            console.log('✅ Pedido enviado a Google Sheets:', result.message);
+        } else {
+            console.warn('⚠️ Error al enviar a Google Sheets:', result.message);
+        }
+    })
+    .catch(function(error) {
+        console.warn('⚠️ Error al enviar a Google Sheets:', error);
     });
 }
 
 // ================================================================
-// 8. ENVIAR PEDIDO POR WHATSAPP O SMS
+// 8. FUNCIONES DE CONTACTO - NUEVO
 // ================================================================
 
-function sendOrder() {
+function obtenerMensajePedido() {
     if (cart.length === 0) {
-        showToast('❌ El carrito está vacío');
-        return;
+        return null;
     }
 
     var telefonoInput = document.getElementById('clienteTelefono');
@@ -469,7 +485,7 @@ function sendOrder() {
     if (!telefonoCliente || telefonoCliente.length < 8) {
         showToast('⚠️ Ingresa tu número de teléfono para continuar');
         if (telefonoInput) telefonoInput.focus();
-        return;
+        return null;
     }
 
     var total = getTotal();
@@ -486,82 +502,50 @@ function sendOrder() {
     var numeroPedido = Math.floor(1000 + Math.random() * 9000);
     var fecha = new Date().toLocaleString('es-CU');
 
-    var mensaje = '🛒 *NUEVO PEDIDO #' + numeroPedido + '*%0A';
-    mensaje += '📅 ' + fecha + '%0A%0A';
-    mensaje += '📋 *PRODUCTOS:*%0A';
+    var mensaje = '🛒 *NUEVO PEDIDO #' + numeroPedido + '*\n';
+    mensaje += '📅 ' + fecha + '\n\n';
+    mensaje += '📋 *PRODUCTOS:*\n';
     cart.forEach(function(item) {
-        mensaje += '  • ' + item.name + ' × ' + item.quantity + ' = $' + (item.price * item.quantity).toLocaleString() + '%0A';
+        mensaje += '  • ' + item.name + ' × ' + item.quantity + ' = $' + (item.price * item.quantity).toLocaleString() + '\n';
     });
-    mensaje += '%0A💰 *Total: $' + total.toLocaleString() + ' CUP*';
-    mensaje += '%0A📦 *Peso aprox: ' + pesoTotal.toFixed(1) + ' kg*';
-    mensaje += '%0A%0A--- *DATOS DEL CLIENTE* ---';
-    mensaje += '%0A📍 *Dirección:* (Confirma)';
-    mensaje += '%0A📞 *Teléfono:* ' + telefonoCliente;
-    mensaje += '%0A💳 *Pago:* (Efectivo / Transferencia)';
-    mensaje += '%0A%0A⏰ *Entregamos en el día (9am - 8pm)*';
-    mensaje += '%0A%0A✅ *¡Gracias por tu compra!*';
+    mensaje += '\n💰 *Total: $' + total.toLocaleString() + ' CUP*';
+    mensaje += '\n📦 *Peso aprox: ' + pesoTotal.toFixed(1) + ' kg*';
+    mensaje += '\n\n--- *DATOS DEL CLIENTE* ---';
+    mensaje += '\n📍 *Dirección:* (Confirma)';
+    mensaje += '\n📞 *Teléfono:* ' + telefonoCliente;
+    mensaje += '\n💳 *Pago:* (Efectivo / Transferencia)';
+    mensaje += '\n\n⏰ *Entregamos en el día (9am - 8pm)*';
+    mensaje += '\n\n✅ *¡Gracias por tu compra!*';
 
-    mostrarOpcionesEnvio(mensaje);
+    return mensaje;
 }
 
-function mostrarOpcionesEnvio(mensaje) {
-    var modal = document.createElement('div');
-    modal.id = 'envioModal';
-    modal.className = 'show';
-    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeInExit 0.3s ease;';
-    modal.innerHTML = `
-        <div class="envio-box">
-            <div class="envio-icon">📱</div>
-            <h2>¿Cómo quieres enviar tu pedido?</h2>
-            <p>Elige la opción que mejor funcione en tu zona.</p>
-            
-            <div class="btn-group">
-                <button class="btn-whatsapp-envio" onclick="enviarPorWhatsApp('${encodeURIComponent(mensaje)}')">
-                    <i class="fab fa-whatsapp"></i> WhatsApp (Con datos)
-                </button>
-                <button class="btn-sms-envio" onclick="enviarPorSMS('${encodeURIComponent(mensaje)}')">
-                    <i class="fas fa-sms"></i> SMS (Sin datos)
-                </button>
-                <button class="btn-cancelar-envio" onclick="cerrarModalEnvio()">
-                    <i class="fas fa-times"></i> Cancelar
-                </button>
-            </div>
-            
-            <p class="envio-note">
-                <i class="fas fa-info-circle"></i> SMS funciona sin conexión a internet
-            </p>
-        </div>
-    `;
-    document.body.appendChild(modal);
+function enviarPorWhatsAppConCarrito() {
+    var mensaje = obtenerMensajePedido();
+    if (!mensaje) return;
     
-    modal.addEventListener('click', function(e) {
-        if (e.target === this) cerrarModalEnvio();
-    });
-}
-
-function enviarPorWhatsApp(mensaje) {
-    var url = 'https://wa.me/5356382909?text=' + mensaje;
+    var url = 'https://wa.me/5356382909?text=' + encodeURIComponent(mensaje);
     window.open(url, '_blank');
-    cerrarModalEnvio();
     closeCartModal();
 }
 
-function enviarPorSMS(mensaje) {
-    var textoDecodificado = decodeURIComponent(mensaje);
-    var url = 'sms:5356382909?body=' + encodeURIComponent(textoDecodificado);
+function enviarPorSMSConCarrito() {
+    var mensaje = obtenerMensajePedido();
+    if (!mensaje) return;
+    
+    var url = 'sms:5356382909?body=' + encodeURIComponent(mensaje);
     window.open(url, '_blank');
     setTimeout(function() {
         showToast('📱 Si no se abre, copia el mensaje y pégalo en SMS');
     }, 1000);
-    cerrarModalEnvio();
     closeCartModal();
 }
 
-function cerrarModalEnvio() {
-    var modal = document.getElementById('envioModal');
-    if (modal) {
-        modal.remove();
-    }
+function llamarPorTelefono() {
+    var telefono = '5356382909';
+    var url = 'tel:' + telefono;
+    window.open(url, '_blank');
+    closeCartModal();
 }
 
 // ================================================================
