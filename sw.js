@@ -1,8 +1,8 @@
 // ================================================================
-// SERVICE WORKER - PLAZA VIEJA (CON CACHÉ DE PRODUCTOS)
+// SERVICE WORKER - PLAZA VIEJA (CON ACTUALIZACIÓN AUTOMÁTICA)
 // ================================================================
 
-const CACHE_NAME = 'plaza-vieja-v2.0';
+const CACHE_NAME = 'plaza-vieja-v12';
 const urlsToCache = [
     '/plaza-vieja/',
     '/plaza-vieja/index.html',
@@ -18,7 +18,6 @@ const urlsToCache = [
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
 ];
 
-// LISTA DE IMÁGENES DE PRODUCTOS PARA CACHEAR
 const productImages = [
     'productos/chorizo-extra-1.6kg-17000.png',
     'productos/jamon-serrano-5lb-49000.png',
@@ -34,22 +33,18 @@ const productImages = [
     'productos/queso-cabra-miel-3.5kg-25000.png'
 ];
 
-// Unir todas las URLs para cachear
 const allUrlsToCache = urlsToCache.concat(productImages);
 
-// ================================================================
-// INSTALACIÓN - Cachear todo
-// ================================================================
-
+// INSTALACIÓN
 self.addEventListener('install', function(event) {
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(function(cache) {
-                console.log('📦 Cacheando todos los recursos...');
+                console.log('📦 Cacheando recursos...');
                 return cache.addAll(allUrlsToCache);
             })
             .then(function() {
-                console.log('✅ Todos los recursos cacheados correctamente');
+                console.log('✅ Cache completado');
                 return self.skipWaiting();
             })
             .catch(function(error) {
@@ -58,96 +53,65 @@ self.addEventListener('install', function(event) {
     );
 });
 
-// ================================================================
 // ACTIVACIÓN - Limpiar caches viejos
-// ================================================================
-
 self.addEventListener('activate', function(event) {
     event.waitUntil(
         caches.keys().then(function(cacheNames) {
             return Promise.all(
                 cacheNames.map(function(cacheName) {
                     if (cacheName !== CACHE_NAME) {
-                        console.log('🗑️ Eliminando cache viejo:', cacheName);
+                        console.log('🗑️ Eliminando cache:', cacheName);
                         return caches.delete(cacheName);
                     }
                 })
             );
         }).then(function() {
-            console.log('✅ Service Worker activado y listo');
+            console.log('✅ Service Worker activado');
             return self.clients.claim();
         })
     );
 });
 
-// ================================================================
-// FETCH - Estrategia: Cache First (Muy rápido)
-// ================================================================
-
+// FETCH - Ignorando extensiones de Chrome
 self.addEventListener('fetch', function(event) {
-    // Estrategia: Cache First - Buscar en caché primero
+    if (event.request.url.startsWith('chrome-extension://')) {
+        return;
+    }
+    
     event.respondWith(
         caches.match(event.request)
             .then(function(response) {
-                // Si está en caché, devolverlo (MUY RÁPIDO)
                 if (response) {
                     return response;
                 }
                 
-                // Si no está en caché, buscar en la red
-                var fetchRequest = event.request.clone();
-                
-                return fetch(fetchRequest).then(function(response) {
-                    // Verificar si es una respuesta válida
+                return fetch(event.request).then(function(response) {
                     if (!response || response.status !== 200 || response.type !== 'basic') {
                         return response;
                     }
                     
-                    // Clonar la respuesta para cachearla
                     var responseToCache = response.clone();
-                    
-                    // Guardar en caché para futuras visitas
                     caches.open(CACHE_NAME)
                         .then(function(cache) {
                             try {
                                 cache.put(event.request, responseToCache);
-                                console.log('📦 Nuevo recurso cacheado:', event.request.url);
-                            } catch (e) {
-                                // Ignorar errores
-                            }
+                            } catch (e) {}
                         });
                     
                     return response;
                 }).catch(function() {
-                    // Si offline y no está en caché
-                    return new Response('⚠️ Sin conexión a internet', {
+                    return new Response('⚠️ Sin conexión', {
                         status: 503,
-                        statusText: 'Service Unavailable'
+                        statusText: 'Offline'
                     });
                 });
             })
     );
 });
 
-// ================================================================
-// ACTUALIZACIÓN AUTOMÁTICA - Cuando hay cambios
-// ================================================================
-
+// ACTUALIZACIÓN AUTOMÁTICA
 self.addEventListener('message', function(event) {
     if (event.data === 'skipWaiting') {
         self.skipWaiting();
-    }
-});
-
-// ================================================================
-// SINCERONIZACIÓN - Para pedidos pendientes (opcional)
-// ================================================================
-
-self.addEventListener('sync', function(event) {
-    if (event.tag === 'sync-orders') {
-        event.waitUntil(
-            // Aquí se podría implementar sincronización de pedidos pendientes
-            console.log('🔄 Sincronizando pedidos pendientes...')
-        );
     }
 });
