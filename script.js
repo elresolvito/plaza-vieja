@@ -435,7 +435,7 @@ function closeCartModal() {
 // ================================================================
 
 function enviarAGoogleSheets(telefono, productos, total, peso) {
-    var url = 'https://script.google.com/macros/s/AKfycbzJM-Nqe4y4uF1-I5s0aASZrIAdhuteoXzrfjz1cYjcFXnXF3LZVOU601AAnT9yW1iQ/exec';
+    var url = 'https://script.google.com/macros/s/AKfycbwi5Hn5Xnoy_uRC2zLeVxcipV_Rb8D2HOKAu9hV0NP7YrvfXEknHDVcXy7W8aZjYZdB/exec';
     
     var data = {
         telefono: telefono,
