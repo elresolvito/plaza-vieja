@@ -507,7 +507,7 @@ function obtenerMensajePedido() {
     mensaje += '\n📍 *Dirección:* (Confirma)';
     mensaje += '\n📞 *Teléfono:* ' + telefonoCliente;
     mensaje += '\n💳 *Pago:* (Efectivo / Transferencia)';
-    mensaje += '\n\n⏰ *Entregamos en el día (9am - 8pm)*';
+    mensaje += '\n\n⏰ *Entregamos en el día (9am - 6pm)*';
     mensaje += '\n\n✅ *El administrador confirmará los datos y coordinará la entrega*';
 
     return mensaje;
