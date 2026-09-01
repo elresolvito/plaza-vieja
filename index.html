@@ -604,6 +604,38 @@
             box-shadow: 0 2px 8px rgba(22, 163, 74, 0.4);
         }
         
+        /* Estilo para productos agotados */
+        .unavailable-product-card {
+            background-color: #f8f8f8;
+            cursor: not-allowed !important;
+            filter: grayscale(80%);
+            opacity: 0.7;
+        }
+        .unavailable-product-card .product-name,
+        .unavailable-product-card .product-description {
+            color: var(--text-medium) !important;
+        }
+        .unavailable-product-card .btn-detail {
+            background-color: #9ca3af !important;
+            cursor: not-allowed !important;
+        }
+        .unavailable-product-card .btn-detail:hover {
+            background-color: #9ca3af !important;
+            transform: none !important;
+        }
+        .product-status-unavailable {
+            display: inline-block;
+            background: #ef4444;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 2px 12px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+        
         .product-card .info {
             padding: 14px;
             flex: 1;
@@ -967,7 +999,7 @@
             margin-top: 8px;
         }
         
-        /* Botón de contacto en el carrito - NUEVO */
+        /* Botón de contacto en el carrito */
         .modal-box .btn-contacto {
             width: 100%;
             padding: 14px;
@@ -1196,7 +1228,7 @@ VENTAJAS
 <section id="ventajas" class="section bg-white">
     <div class="container">
         <h2 class="section-title">¿Por Qué Plaza Vieja?</h2>
-        <p class="section-subtitle">Enfocados en tu comodidad, ahorro y tranquilidad en La HABANA.</p>
+        <p class="section-subtitle">Enfocados en tu comodidad, ahorro y tranquilidad en La Habana Vieja.</p>
         <div class="ventajas-grid">
             <div class="ventaja-card fade-in">
                 <div class="icon">⏱️</div>
@@ -1285,7 +1317,7 @@ FOOTER CON QR
         <div class="social">
             <a href="https://wa.me/5356382909?text=¡Hola!%20Quiero%20hacer%20un%20pedido." target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
         </div>
-        <p>&copy; 2026 Plaza Vieja. Todos los derechos reservados.</p>
+        <p>&copy; 2024 Plaza Vieja. Todos los derechos reservados.</p>
         
         <!-- Sección QR en el footer -->
         <div class="footer-qr">
@@ -1370,7 +1402,7 @@ MODAL DE PRODUCTO (OCULTO)
 </div>
 
 <!-- ============================================
-MODAL DE CARRITO (OCULTO) - CON OPCIONES DE CONTACTO
+MODAL DE CARRITO (OCULTO)
 ============================================ -->
 <div class="modal-overlay" id="cartModal">
     <div class="modal-box">
@@ -1384,18 +1416,14 @@ MODAL DE CARRITO (OCULTO) - CON OPCIONES DE CONTACTO
         <div id="cartItems"><p style="text-align:center;color:var(--text-medium);">Tu carrito está vacío</p></div>
         <div class="cart-total" id="cartTotalDisplay">Total: $0</div>
         
-        <!-- ============================================
-        CAMPO PARA EL TELÉFONO DEL CLIENTE
-        ============================================ -->
+        <!-- Campo para el teléfono -->
         <div class="telefono-field">
             <label for="clienteTelefono">📞 Tu número de teléfono</label>
             <input type="tel" id="clienteTelefono" placeholder="Ej: 5356382909">
             <p class="help-text">* Necesario para coordinar la entrega y confirmar tu pedido</p>
         </div>
         
-        <!-- ============================================
-        OPCIONES DE CONTACTO - NUEVO
-        ============================================ -->
+        <!-- Opciones de contacto -->
         <p style="font-size:0.875rem;font-weight:600;color:var(--text-dark);margin:12px 0 8px;text-align:center;">
             📱 Elige cómo quieres contactarnos:
         </p>
@@ -1412,7 +1440,7 @@ MODAL DE CARRITO (OCULTO) - CON OPCIONES DE CONTACTO
         
         <button class="btn-contacto llamar" onclick="llamarPorTelefono()">
             <i class="fas fa-phone"></i> Llamar
-            <span style="font-size:0.75rem;opacity:0.7;">(59731937)</span>
+            <span style="font-size:0.75rem;opacity:0.7;">(56382909)</span>
         </button>
         
         <p style="font-size:0.7rem;color:var(--text-light);text-align:center;margin-top:10px;">
@@ -1443,40 +1471,10 @@ BOTÓN VOLVER ARRIBA
 </button>
 
 <!-- ============================================
-DETECTOR DE ACTUALIZACIONES - APP INSTALADA
+CARGA DE SCRIPTS CON VERSIÓN AUTOMÁTICA
 ============================================ -->
 <script>
-    // ================================================================
-    // VERSIÓN DE LA APP - CAMBIA ESTE NÚMERO CON CADA ACTUALIZACIÓN
-    // ================================================================
-    const APP_VERSION = 12;
-    
-    // Verificar si hay una nueva versión
-    const currentVersion = localStorage.getItem('appVersion');
-    
-    if (currentVersion && currentVersion !== String(APP_VERSION)) {
-        console.log('🔄 Nueva versión disponible. Actualizando app...');
-        localStorage.setItem('appVersion', APP_VERSION);
-        
-        // Limpiar caché del Service Worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                registrations.forEach(function(registration) {
-                    registration.unregister();
-                    console.log('🗑️ Service Worker antiguo eliminado');
-                });
-            });
-        }
-        
-        // Recargar con limpieza de caché
-        window.location.reload(true);
-    } else if (!currentVersion) {
-        localStorage.setItem('appVersion', APP_VERSION);
-    }
-</script>
-
-<!-- Script con versión -->
-<script>
+    const APP_VERSION = 8;
     document.write('<script src="script.js?v=' + APP_VERSION + '"><\/script>');
 </script>
 
