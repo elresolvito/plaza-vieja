@@ -22,7 +22,7 @@ function extractWeight(filename) {
 }
 
 // ================================================================
-// PRODUCTOS - CON LOS NOMBRES EXACTOS DE TUS ARCHIVOS
+// PRODUCTOS - CON PRODUCTOS AGOTADOS
 // ================================================================
 
 var products = [
@@ -47,7 +47,7 @@ var products = [
         name: "Jamón Rápido", 
         image: "productos/jamon-rapido-2kg-11000.png", 
         desc: "Jamón rápido, práctico y versátil para el consumo diario.", 
-        category: "Embutidos" 
+        category: "Embutidos",
         status: "unavailable"
     },
     { 
@@ -55,7 +55,7 @@ var products = [
         name: "Jamón Barra", 
         image: "productos/Jamón barra 2 kilos 11000.png", 
         desc: "Jamón en barra, ideal para lonchear y preparar sándwiches.", 
-        category: "Embutidos" 
+        category: "Embutidos",
         status: "unavailable"
     },
     { 
@@ -125,6 +125,7 @@ var products = [
         image: "productos/Queso azul 3 kilos 31000.png", 
         desc: "Queso azul de sabor fuerte y con carácter.", 
         category: "Quesos", 
+        tag: "nuevo",
         status: "unavailable"
     },
     { 
@@ -199,6 +200,12 @@ function getCount() {
 }
 
 function addToCart(product, qty) {
+    // No permitir añadir productos agotados
+    if (product.status === 'unavailable') {
+        showToast('❌ Este producto está agotado');
+        return;
+    }
+    
     var existing = cart.find(function(i) { return i.id === product.id; });
     if (existing) {
         existing.quantity += qty;
@@ -311,6 +318,7 @@ function renderProducts() {
     cats.forEach(function(cat) {
         html += '<div style="grid-column:1/-1;text-align:center;padding:16px 0 8px;"><h3 style="font-size:1.25rem;font-weight:800;color:var(--primary);border-bottom:2px solid #e5e7eb;padding-bottom:8px;display:inline-block;">— ' + cat + ' —</h3></div>';
         grouped[cat].forEach(function(p) {
+            var isUnavailable = p.status === 'unavailable';
             var tagHtml = '';
             if (p.tag === 'oferta') {
                 tagHtml = '<span class="product-tag">Oferta</span>';
@@ -318,17 +326,26 @@ function renderProducts() {
                 tagHtml = '<span class="product-tag new">Nuevo</span>';
             }
             
-            html += '<div class="product-card" onclick="openProductModal(' + p.id + ')">' +
+            var cardClass = 'product-card' + (isUnavailable ? ' unavailable-product-card' : '');
+            var clickHandler = isUnavailable ? '' : 'onclick="openProductModal(' + p.id + ')"';
+            var priceHtml = isUnavailable 
+                ? '<span style="color:#ef4444;font-weight:700;font-size:1.125rem;">Agotado</span>'
+                : '<span class="price">$' + p.price.toLocaleString() + '</span>';
+            var btnHtml = isUnavailable
+                ? '<div class="btn-detail" style="background:#9ca3af;cursor:not-allowed;">Agotado</div>'
+                : '<button class="btn-detail">Ver Detalles</button>';
+            
+            html += '<div class="' + cardClass + '" ' + clickHandler + ' style="transition-delay: ' + (grouped[cat].indexOf(p) * 50) + 'ms;">' +
                 '<div class="img-wrap">' +
                     tagHtml +
                     '<img src="' + p.image + '" alt="' + p.name + '" loading="lazy" onerror="this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22%3E%3Crect fill=%22%230d3b33%22 width=%22300%22 height=%22300%22/%3E%3Ctext x=%22150%22 y=%22150%22 text-anchor=%22middle%22 font-family=%22Inter,sans-serif%22 font-size=%2220%22 fill=%22white%22%3E' + encodeURIComponent(p.name) + '%3C/text%3E%3C/svg%3E\'">' +
                 '</div>' +
                 '<div class="info">' +
-                    '<h3>' + p.name + '</h3>' +
+                    '<h3 class="product-name">' + p.name + '</h3>' +
                     (p.detail ? '<span class="detail">' + p.detail + '</span>' : '') +
-                    '<span class="desc">' + p.desc + '</span>' +
-                    '<span class="price">$' + p.price.toLocaleString() + '</span>' +
-                    '<button class="btn-detail">Ver Detalles</button>' +
+                    '<span class="desc product-description">' + p.desc + '</span>' +
+                    priceHtml +
+                    btnHtml +
                 '</div>' +
             '</div>';
         });
@@ -386,6 +403,13 @@ function filterProducts() {
 function openProductModal(id) {
     currentProduct = products.find(function(p) { return p.id === id; });
     if (!currentProduct) return;
+    
+    // No abrir modal para productos agotados
+    if (currentProduct.status === 'unavailable') {
+        showToast('❌ Este producto está agotado');
+        return;
+    }
+    
     currentQty = 1;
     document.getElementById('modalTitle').textContent = currentProduct.name;
     var img = document.getElementById('modalImage');
@@ -433,11 +457,11 @@ function closeCartModal() {
 }
 
 // ================================================================
-// 7. ENVIAR A GOOGLE SHEETS - URL CORRECTA
+// 7. ENVIAR A GOOGLE SHEETS
 // ================================================================
 
 function enviarAGoogleSheets(telefono, productos, total, peso) {
-    var url = 'https://script.google.com/macros/s/AKfycbxBKAgrAqTYbtA67MoEAwTKmyKug9Idx_eT8Cd5u9El2bFeLcO7Hp_gQxPuRFYjTKjY/exec';
+    var url = 'https://script.google.com/macros/s/AKfycbzm8TTL_EYqq-5N6XNMg7u3mdOlbUEwfp8jCxo7g1NxFqRfydniWuJEcgPoR_bw7as3/exec';
     
     var data = {
         telefono: telefono,
@@ -446,19 +470,26 @@ function enviarAGoogleSheets(telefono, productos, total, peso) {
         peso: peso
     };
     
-    console.log('📤 Enviando a Google Sheets:', data);
-    console.log('📤 URL:', url);
-    
     fetch(url, {
         method: 'POST',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(data)
     })
-    .then(function() {
-        console.log('✅ Pedido enviado a Google Sheets');
+    .then(function(response) {
+        if (!response.ok) {
+            throw new Error('Error en la respuesta del servidor: ' + response.status);
+        }
+        return response.json();
+    })
+    .then(function(result) {
+        if (result.success) {
+            console.log('✅ Pedido enviado a Google Sheets:', result.message);
+        } else {
+            console.warn('⚠️ Error al enviar a Google Sheets:', result.message);
+        }
     })
     .catch(function(error) {
         console.warn('⚠️ Error al enviar a Google Sheets:', error);
@@ -509,8 +540,8 @@ function obtenerMensajePedido() {
     mensaje += '\n📍 *Dirección:* (Confirma)';
     mensaje += '\n📞 *Teléfono:* ' + telefonoCliente;
     mensaje += '\n💳 *Pago:* (Efectivo / Transferencia)';
-    mensaje += '\n\n⏰ *Entregamos en el día (9am - 6pm)*';
-    mensaje += '\n\n✅ *El administrador confirmará los datos y coordinará la entrega.*';
+    mensaje += '\n\n⏰ *Entregamos en el día (9am - 8pm)*';
+    mensaje += '\n\n✅ *¡Gracias por tu compra!*';
 
     return mensaje;
 }
@@ -568,43 +599,7 @@ function shakeCart() {
 }
 
 // ================================================================
-// 10. VERIFICAR ACTUALIZACIONES PERIÓDICAMENTE
-// ================================================================
-
-function verificarActualizaciones() {
-    setInterval(function() {
-        fetch('/plaza-vieja/index.html?' + Date.now())
-            .then(function(response) {
-                return response.text();
-            })
-            .then(function(html) {
-                var match = html.match(/const APP_VERSION = (\d+);/);
-                if (match) {
-                    var nuevaVersion = parseInt(match[1]);
-                    var versionActual = parseInt(localStorage.getItem('appVersion')) || 0;
-                    
-                    if (nuevaVersion > versionActual) {
-                        console.log('🔄 Nueva versión detectada (' + nuevaVersion + '). Actualizando...');
-                        localStorage.setItem('appVersion', nuevaVersion);
-                        
-                        if ('serviceWorker' in navigator) {
-                            navigator.serviceWorker.ready.then(function(registration) {
-                                registration.active.postMessage('skipWaiting');
-                            });
-                        }
-                        
-                        setTimeout(function() {
-                            window.location.reload(true);
-                        }, 2000);
-                    }
-                }
-            })
-            .catch(function(error) {});
-    }, 600000);
-}
-
-// ================================================================
-// 11. DETECCIÓN DE CAMBIOS
+// 10. DETECCIÓN DE CAMBIOS
 // ================================================================
 
 function checkForUpdates() {
@@ -625,7 +620,7 @@ document.addEventListener('visibilitychange', function() {
 });
 
 // ================================================================
-// 12. INICIALIZACIÓN
+// 11. INICIALIZACIÓN
 // ================================================================
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -671,5 +666,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     setTimeout(checkForUpdates, 5000);
-    setTimeout(verificarActualizaciones, 30000);
 });
