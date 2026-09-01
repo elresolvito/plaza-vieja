@@ -45,14 +45,14 @@ var products = [
     { 
         id: 103, 
         name: "Jamón Rápido", 
-        image: "productos/jamon-rapido-2kg-10000.png", 
+        image: "productos/jamon-rapido-2kg-11000.png", 
         desc: "Jamón rápido, práctico y versátil para el consumo diario.", 
         category: "Embutidos" 
     },
     { 
         id: 104, 
         name: "Jamón Barra", 
-        image: "productos/Jamón barra 2 kilos 10000.png", 
+        image: "productos/Jamón barra 2 kilos 11000.png", 
         desc: "Jamón en barra, ideal para lonchear y preparar sándwiches.", 
         category: "Embutidos" 
     },
