@@ -48,6 +48,7 @@ var products = [
         image: "productos/jamon-rapido-2kg-11000.png", 
         desc: "Jamón rápido, práctico y versátil para el consumo diario.", 
         category: "Embutidos" 
+        status: "unavailable"
     },
     { 
         id: 104, 
@@ -55,6 +56,7 @@ var products = [
         image: "productos/Jamón barra 2 kilos 11000.png", 
         desc: "Jamón en barra, ideal para lonchear y preparar sándwiches.", 
         category: "Embutidos" 
+        status: "unavailable"
     },
     { 
         id: 105, 
@@ -123,7 +125,7 @@ var products = [
         image: "productos/Queso azul 3 kilos 31000.png", 
         desc: "Queso azul de sabor fuerte y con carácter.", 
         category: "Quesos", 
-        tag: "nuevo" 
+        status: "unavailable"
     },
     { 
         id: 304, 
