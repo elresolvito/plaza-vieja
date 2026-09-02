@@ -496,7 +496,7 @@ function enviarAGoogleSheets(telefono, productos, total, peso) {
 }
 
 // ================================================================
-// 8. FUNCIONES DE CONTACTO
+// 8. FUNCIONES DE CONTACTO - NÚMERO ACTUALIZADO
 // ================================================================
 
 function obtenerMensajePedido() {
@@ -549,7 +549,7 @@ function enviarPorWhatsAppConCarrito() {
     var mensaje = obtenerMensajePedido();
     if (!mensaje) return;
     
-    var url = 'https://wa.me/5356382909?text=' + encodeURIComponent(mensaje);
+    var url = 'https://wa.me/5359731937?text=' + encodeURIComponent(mensaje);
     window.open(url, '_blank');
     closeCartModal();
 }
@@ -558,7 +558,7 @@ function enviarPorSMSConCarrito() {
     var mensaje = obtenerMensajePedido();
     if (!mensaje) return;
     
-    var url = 'sms:5356382909?body=' + encodeURIComponent(mensaje);
+    var url = 'sms:5359731937?body=' + encodeURIComponent(mensaje);
     window.open(url, '_blank');
     setTimeout(function() {
         showToast('📱 Si no se abre, copia el mensaje y pégalo en SMS');
@@ -567,7 +567,7 @@ function enviarPorSMSConCarrito() {
 }
 
 function llamarPorTelefono() {
-    var telefono = '5356382909';
+    var telefono = '5359731937';
     var url = 'tel:' + telefono;
     window.open(url, '_blank');
     closeCartModal();
