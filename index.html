@@ -297,7 +297,7 @@
         @media (min-width: 768px) { .menu-btn { display: none; } }
         
         /* ============================================
-           HERO - MÁS DIRECTO
+           HERO
            ============================================ */
         .hero {
             min-height: 350px;
@@ -818,7 +818,6 @@
         }
         footer .social a:hover { color: white; transform: scale(1.1); }
         
-        /* Sección QR en footer */
         .footer-qr {
             text-align: center;
             padding: 16px 0 8px;
@@ -998,7 +997,6 @@
             margin-top: 6px;
         }
         
-        /* Botón de contacto en el carrito */
         .modal-box .btn-contacto {
             width: 100%;
             padding: 12px;
@@ -1045,7 +1043,6 @@
             margin-right: 4px;
         }
         
-        /* Modal QR */
         #qrModal .modal-box {
             text-align: center;
             max-width: 360px;
@@ -1095,9 +1092,6 @@
             transform: scale(1.02);
         }
         
-        /* ============================================
-           CAMPO DE TELÉFONO
-           ============================================ */
         .telefono-field {
             margin-top: 10px;
             padding: 10px;
@@ -1132,9 +1126,6 @@
             margin-top: 2px;
         }
         
-        /* ============================================
-           UTILIDADES
-           ============================================ */
         .hidden { display: none !important; }
         .text-center { text-align: center; }
         
@@ -1159,9 +1150,6 @@
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 2px; }
         
-        /* ============================================
-           RESPONSIVE
-           ============================================ */
         @media (max-width: 480px) {
             .hero h1 { font-size: 1.8rem; }
             .hero p { font-size: 0.95rem; }
@@ -1281,7 +1269,7 @@ FOOTER CON QR
 <footer>
     <div class="container">
         <div class="social">
-            <a href="https://wa.me/5356382909?text=¡Hola!%20Quiero%20hacer%20un%20pedido." target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://wa.me/5359731937?text=¡Hola!%20Quiero%20hacer%20un%20pedido." target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
         </div>
         <p>&copy; 2024 Plaza Vieja. Todos los derechos reservados.</p>
         
@@ -1299,7 +1287,7 @@ FOOTER CON QR
 <!-- ============================================
 BOTÓN WHATSAPP FLOTANTE - SIEMPRE VISIBLE
 ============================================ -->
-<a href="https://wa.me/5356382909?text=¡Hola!%20Quiero%20hacer%20un%20pedido." 
+<a href="https://wa.me/5359731937?text=¡Hola!%20Quiero%20hacer%20un%20pedido." 
    target="_blank" 
    class="whatsapp-float"
    aria-label="Contactar por WhatsApp">
@@ -1308,7 +1296,7 @@ BOTÓN WHATSAPP FLOTANTE - SIEMPRE VISIBLE
 </a>
 
 <!-- ============================================
-MODAL QR - COMPARTIR
+MODAL QR
 ============================================ -->
 <div class="modal-overlay" id="qrModal">
     <div class="modal-box">
@@ -1334,7 +1322,7 @@ MODAL QR - COMPARTIR
 </div>
 
 <!-- ============================================
-MODAL DE SALIDA - SUGERENCIA DE INSTALACIÓN
+MODAL DE SALIDA
 ============================================ -->
 <div id="exitModal" class="exit-modal">
     <div class="exit-modal-box">
@@ -1394,7 +1382,7 @@ MODAL DE CARRITO
         
         <div class="telefono-field">
             <label for="clienteTelefono">📞 Tu número de teléfono</label>
-            <input type="tel" id="clienteTelefono" placeholder="Ej: 5356382909">
+            <input type="tel" id="clienteTelefono" placeholder="Ej: 5359731937">
             <p class="help-text">* Necesario para coordinar la entrega</p>
         </div>
         
@@ -1414,7 +1402,7 @@ MODAL DE CARRITO
         
         <button class="btn-contacto llamar" onclick="llamarPorTelefono()">
             <i class="fas fa-phone"></i> Llamar
-            <span style="font-size:0.7rem;opacity:0.7;">(56382909)</span>
+            <span style="font-size:0.7rem;opacity:0.7;">(59731937)</span>
         </button>
         
         <p style="font-size:0.65rem;color:var(--text-light);text-align:center;margin-top:8px;">
@@ -1448,7 +1436,7 @@ BOTÓN VOLVER ARRIBA
 CARGA DE SCRIPTS CON VERSIÓN AUTOMÁTICA
 ============================================ -->
 <script>
-    const APP_VERSION = 9;
+    const APP_VERSION = 10;
     document.write('<script src="script.js?v=' + APP_VERSION + '"><\/script>');
 </script>
 
