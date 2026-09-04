@@ -459,40 +459,6 @@
         .bg-gray { background: var(--bg); }
         
         /* ============================================
-           CATEGORÍAS RÁPIDAS
-           ============================================ */
-        .quick-categories {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding: 8px 0 16px;
-            margin-bottom: 16px;
-            scrollbar-width: none;
-            -webkit-overflow-scrolling: touch;
-        }
-        .quick-categories::-webkit-scrollbar { display: none; }
-        .quick-cat-btn {
-            flex-shrink: 0;
-            padding: 8px 20px;
-            border-radius: 50px;
-            border: 1px solid #e5e7eb;
-            background: var(--white);
-            font-weight: 600;
-            font-size: 0.8125rem;
-            cursor: pointer;
-            transition: var(--transition);
-            color: var(--text-medium);
-            font-family: inherit;
-            white-space: nowrap;
-        }
-        .quick-cat-btn:hover { background: #f3f4f6; }
-        .quick-cat-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-        
-        /* ============================================
            FILTROS
            ============================================ */
         .filters {
@@ -1233,7 +1199,7 @@ MERCADO / PRODUCTOS
             <input type="text" id="searchInput" placeholder="Buscar productos..." oninput="filterProducts()">
         </div>
         
-        <div class="quick-categories" id="quickCategories"></div>
+        <!-- CATEGORÍAS RÁPIDAS ELIMINADAS -->
         
         <div class="filters" id="filterContainer">
             <button class="filter-btn active" data-category="all" onclick="filterByCategory('all')">Todos</button>
@@ -1438,7 +1404,7 @@ BOTÓN VOLVER ARRIBA
 SCRIPT
 ============================================ -->
 <script>
-    const APP_VERSION = 9;
+    const APP_VERSION = 10;
     document.write('<script src="script.js?v=' + APP_VERSION + '"><\/script>');
 </script>
 
