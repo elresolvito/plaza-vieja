@@ -310,7 +310,6 @@
             position: relative;
             overflow: hidden;
         }
-        /* Recorte visual: borde inferior que indica que hay más contenido */
         .hero::after {
             content: '';
             position: absolute;
@@ -367,7 +366,6 @@
             box-shadow: 0 6px 35px rgba(201, 74, 55, 0.6);
         }
         
-        /* Texto "Desliza hacia abajo" */
         .hero .scroll-hint {
             margin-top: 20px;
             font-size: 0.95rem;
@@ -379,7 +377,6 @@
             margin-right: 6px;
         }
         
-        /* Flecha animada */
         .scroll-arrow {
             margin-top: 8px;
             display: inline-block;
@@ -413,7 +410,6 @@
             .hero .scroll-hint { font-size: 0.8rem; }
         }
         
-        /* Botón QR en hero */
         .hero .btn-qr {
             display: inline-flex;
             align-items: center;
@@ -461,33 +457,6 @@
         @media (min-width: 768px) { .section-title { font-size: 2.25rem; } }
         .bg-white { background: var(--white); }
         .bg-gray { background: var(--bg); }
-        
-        /* ============================================
-           VENTAJAS
-           ============================================ */
-        .ventajas-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .ventaja-card {
-            background: var(--white);
-            padding: 24px 16px;
-            border-radius: var(--radius);
-            text-align: center;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-        }
-        .ventaja-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
-        .ventaja-card .icon { font-size: 32px; color: var(--primary); margin-bottom: 12px; }
-        .ventaja-card h3 { font-size: 1.0625rem; font-weight: 700; margin-bottom: 6px; }
-        .ventaja-card p { font-size: 0.875rem; color: var(--text-medium); line-height: 1.5; }
-        @media (min-width: 640px) {
-            .ventajas-grid { grid-template-columns: repeat(4, 1fr); }
-            .ventaja-card { padding: 32px 20px; }
-        }
         
         /* ============================================
            CATEGORÍAS RÁPIDAS
@@ -846,7 +815,6 @@
         }
         footer .social a:hover { color: white; transform: scale(1.1); }
         
-        /* Sección QR en footer */
         .footer-qr {
             text-align: center;
             padding: 20px 0 12px;
@@ -1024,7 +992,6 @@
             margin-top: 8px;
         }
         
-        /* Botón de contacto en el carrito */
         .modal-box .btn-contacto {
             width: 100%;
             padding: 14px;
@@ -1071,7 +1038,7 @@
             margin-right: 4px;
         }
         
-        /* Modal QR - Estilos específicos */
+        /* Modal QR */
         #qrModal .modal-box {
             text-align: center;
             max-width: 380px;
@@ -1185,9 +1152,6 @@
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
         
-        /* ============================================
-           RESPONSIVE
-           ============================================ */
         @media (max-width: 480px) {
             .section { padding: 40px 0; }
             .section-title { font-size: 1.5rem; }
@@ -1224,7 +1188,6 @@ HEADER
         <nav class="nav-links">
             <a href="#mercado">Mercado</a>
             <a href="#como-comprar">Cómo Comprar</a>
-            <a href="#ventajas">Ventajas</a>
             <a href="#contacto">Contacto</a>
         </nav>
         <button class="menu-btn" id="menuBtn" aria-label="Menú">☰</button>
@@ -1232,7 +1195,7 @@ HEADER
 </header>
 
 <!-- ============================================
-HERO - CON LAS 4 MEJORAS
+HERO
 ============================================ -->
 <section class="hero">
     <div class="hero-content">
@@ -1240,56 +1203,20 @@ HERO - CON LAS 4 MEJORAS
         <p>Embutidos, quesos y productos de alta gama seleccionados para ti.<br>
         <strong>Disfruta de lo mejor sin moverte de casa.</strong></p>
         
-        <!-- Botón principal más llamativo -->
         <a href="#mercado" class="btn-primary">Ver Productos 👇</a>
         
-        <!-- Botón QR (secundario) -->
         <div style="margin-top:12px;">
             <button class="btn-qr" onclick="document.getElementById('qrModal').classList.add('show')">
                 <i class="fas fa-qrcode"></i> Compartir QR
             </button>
         </div>
         
-        <!-- Texto "Desliza hacia abajo" -->
         <div class="scroll-hint">
             <i class="fas fa-arrow-down"></i> Desliza hacia abajo para ver nuestros productos
         </div>
         
-        <!-- Flecha animada -->
         <div class="scroll-arrow" onclick="document.getElementById('mercado').scrollIntoView({behavior:'smooth'})">
             <i class="fas fa-chevron-down"></i>
-        </div>
-    </div>
-</section>
-
-<!-- ============================================
-VENTAJAS
-============================================ -->
-<section id="ventajas" class="section bg-white">
-    <div class="container">
-        <h2 class="section-title">¿Por Qué Plaza Vieja?</h2>
-        <p class="section-subtitle">Enfocados en tu comodidad, ahorro y tranquilidad en La Habana Vieja.</p>
-        <div class="ventajas-grid">
-            <div class="ventaja-card fade-in">
-                <div class="icon">⏱️</div>
-                <h3>Ahorra Tiempo</h3>
-                <p>Dedica tu tiempo a lo importante, nosotros te llevamos la compra.</p>
-            </div>
-            <div class="ventaja-card fade-in">
-                <div class="icon">🛋️</div>
-                <h3>Compra Cómoda</h3>
-                <p>Selecciona desde casa y recibe tu pedido directo a tu puerta.</p>
-            </div>
-            <div class="ventaja-card fade-in">
-                <div class="icon">📦</div>
-                <h3>Experiencia Sin Estrés</h3>
-                <p>Catálogo fácil de usar, entrega segura y sin complicaciones.</p>
-            </div>
-            <div class="ventaja-card fade-in">
-                <div class="icon">🔒</div>
-                <h3>Seguridad</h3>
-                <p>Confirmación por WhatsApp. Métodos de pago flexibles.</p>
-            </div>
         </div>
     </div>
 </section>
@@ -1359,7 +1286,6 @@ FOOTER CON QR
         </div>
         <p>&copy; 2024 Plaza Vieja. Todos los derechos reservados.</p>
         
-        <!-- Sección QR en el footer -->
         <div class="footer-qr">
             <div class="qr-box" onclick="document.getElementById('qrModal').classList.add('show')" title="Toca para ver QR más grande y compartir">
                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://elresolvito.github.io/plaza-vieja/&bgcolor=ffffff&color=0d3b33&margin=20" 
@@ -1372,7 +1298,7 @@ FOOTER CON QR
 </footer>
 
 <!-- ============================================
-MODAL QR - COMPARTIR (OCULTO POR DEFECTO)
+MODAL QR
 ============================================ -->
 <div class="modal-overlay" id="qrModal">
     <div class="modal-box">
@@ -1398,7 +1324,7 @@ MODAL QR - COMPARTIR (OCULTO POR DEFECTO)
 </div>
 
 <!-- ============================================
-MODAL DE SALIDA - SUGERENCIA DE INSTALACIÓN (OCULTO)
+MODAL DE SALIDA
 ============================================ -->
 <div id="exitModal" class="exit-modal">
     <div class="exit-modal-box">
@@ -1423,7 +1349,7 @@ MODAL DE SALIDA - SUGERENCIA DE INSTALACIÓN (OCULTO)
 </div>
 
 <!-- ============================================
-MODAL DE PRODUCTO (OCULTO)
+MODAL DE PRODUCTO
 ============================================ -->
 <div class="modal-overlay" id="productModal">
     <div class="modal-box">
@@ -1442,7 +1368,7 @@ MODAL DE PRODUCTO (OCULTO)
 </div>
 
 <!-- ============================================
-MODAL DE CARRITO (OCULTO) - CON OPCIONES DE CONTACTO
+MODAL DE CARRITO
 ============================================ -->
 <div class="modal-overlay" id="cartModal">
     <div class="modal-box">
@@ -1456,18 +1382,12 @@ MODAL DE CARRITO (OCULTO) - CON OPCIONES DE CONTACTO
         <div id="cartItems"><p style="text-align:center;color:var(--text-medium);">Tu carrito está vacío</p></div>
         <div class="cart-total" id="cartTotalDisplay">Total: $0</div>
         
-        <!-- ============================================
-        CAMPO PARA EL TELÉFONO DEL CLIENTE
-        ============================================ -->
         <div class="telefono-field">
             <label for="clienteTelefono">📞 Tu número de teléfono</label>
             <input type="tel" id="clienteTelefono" placeholder="Ej: 5356382909">
             <p class="help-text">* Necesario para coordinar la entrega y confirmar tu pedido</p>
         </div>
         
-        <!-- ============================================
-        OPCIONES DE CONTACTO
-        ============================================ -->
         <p style="font-size:0.875rem;font-weight:600;color:var(--text-dark);margin:12px 0 8px;text-align:center;">
             📱 Elige cómo quieres contactarnos:
         </p>
@@ -1494,7 +1414,7 @@ MODAL DE CARRITO (OCULTO) - CON OPCIONES DE CONTACTO
 </div>
 
 <!-- ============================================
-TOAST (NOTIFICACIÓN)
+TOAST
 ============================================ -->
 <div class="toast" id="toast"><span id="toastMsg">Producto añadido</span></div>
 
@@ -1515,10 +1435,10 @@ BOTÓN VOLVER ARRIBA
 </button>
 
 <!-- ============================================
-CARGA DE SCRIPTS CON VERSIÓN AUTOMÁTICA
+SCRIPT
 ============================================ -->
 <script>
-    const APP_VERSION = 8;
+    const APP_VERSION = 9;
     document.write('<script src="script.js?v=' + APP_VERSION + '"><\/script>');
 </script>
 
@@ -1535,7 +1455,7 @@ CARGA DE SCRIPTS CON VERSIÓN AUTOMÁTICA
 
 <script>
 // ================================================================
-// REGISTRO DEL SERVICE WORKER (PWA)
+// REGISTRO DEL SERVICE WORKER
 // ================================================================
 
 if ('serviceWorker' in navigator) {
@@ -1560,7 +1480,7 @@ if (window.matchMedia('(display-mode: standalone)').matches) {
 }
 
 // ================================================================
-// MODAL DE SALIDA - SUGERENCIA DE INSTALACIÓN
+// MODAL DE SALIDA
 // ================================================================
 
 var exitModal = document.getElementById('exitModal');
@@ -1708,7 +1628,6 @@ mobileMenu.innerHTML = `
     <button onclick="closeMobileMenu()" style="position:absolute;top:20px;right:24px;background:none;border:none;color:white;font-size:32px;cursor:pointer;">&times;</button>
     <a href="#mercado" style="color:white;font-size:1.5rem;font-weight:700;text-decoration:none;" onclick="closeMobileMenu()">Mercado</a>
     <a href="#como-comprar" style="color:white;font-size:1.5rem;font-weight:700;text-decoration:none;" onclick="closeMobileMenu()">Cómo Comprar</a>
-    <a href="#ventajas" style="color:white;font-size:1.5rem;font-weight:700;text-decoration:none;" onclick="closeMobileMenu()">Ventajas</a>
     <a href="#contacto" style="color:white;font-size:1.5rem;font-weight:700;text-decoration:none;" onclick="closeMobileMenu()">Contacto</a>
 `;
 document.body.appendChild(mobileMenu);
