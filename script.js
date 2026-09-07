@@ -22,7 +22,7 @@ function extractWeight(filename) {
 }
 
 // ================================================================
-// PRODUCTOS - CON PRODUCTOS AGOTADOS
+// PRODUCTOS - ACTUALIZADOS
 // ================================================================
 
 var products = [
@@ -45,25 +45,24 @@ var products = [
     { 
         id: 103, 
         name: "Jamón Rápido", 
-        image: "productos/jamon-rapido-2kg-11000.png", 
+        image: "productos/jamon-rapido-2kg-10000.png", 
         desc: "Jamón rápido, práctico y versátil para el consumo diario.", 
-        category: "Embutidos",
-        status: "unavailable"
+        category: "Embutidos" 
     },
     { 
         id: 104, 
         name: "Jamón Barra", 
-        image: "productos/Jamón barra 2 kilos 11000.png", 
+        image: "productos/Jamón barra 2 kilos 10000.png", 
         desc: "Jamón en barra, ideal para lonchear y preparar sándwiches.", 
-        category: "Embutidos",
-        status: "unavailable"
+        category: "Embutidos" 
     },
     { 
         id: 105, 
         name: "Chorizo Vela Bravo", 
         image: "productos/chorizo vela bravo 14500.png", 
         desc: "Chorizo vela bravo, sabor intenso y tradicional.", 
-        category: "Embutidos" 
+        category: "Embutidos",
+        status: "unavailable"  // <-- AGOTADO
     },
     { 
         id: 106, 
@@ -125,7 +124,7 @@ var products = [
         image: "productos/Queso azul 3 kilos 31000.png", 
         desc: "Queso azul de sabor fuerte y con carácter.", 
         category: "Quesos", 
-        status: "unavailable"
+        tag: "nuevo" 
     },
     { 
         id: 304, 
@@ -199,12 +198,6 @@ function getCount() {
 }
 
 function addToCart(product, qty) {
-    // No permitir añadir productos agotados
-    if (product.status === 'unavailable') {
-        showToast('❌ Este producto está agotado');
-        return;
-    }
-    
     var existing = cart.find(function(i) { return i.id === product.id; });
     if (existing) {
         existing.quantity += qty;
@@ -325,26 +318,21 @@ function renderProducts() {
                 tagHtml = '<span class="product-tag new">Nuevo</span>';
             }
             
-            var cardClass = 'product-card' + (isUnavailable ? ' unavailable-product-card' : '');
-            var clickHandler = isUnavailable ? '' : 'onclick="openProductModal(' + p.id + ')"';
-            var priceHtml = isUnavailable 
-                ? '<span style="color:#ef4444;font-weight:700;font-size:1.125rem;">Agotado</span>'
-                : '<span class="price">$' + p.price.toLocaleString() + '</span>';
-            var btnHtml = isUnavailable
-                ? '<div class="btn-detail" style="background:#9ca3af;cursor:not-allowed;">Agotado</div>'
-                : '<button class="btn-detail">Ver Detalles</button>';
-            
-            html += '<div class="' + cardClass + '" ' + clickHandler + ' style="transition-delay: ' + (grouped[cat].indexOf(p) * 50) + 'ms;">' +
+            html += '<div class="product-card' + (isUnavailable ? ' unavailable-product-card' : '') + '" ' + (isUnavailable ? '' : 'onclick="openProductModal(' + p.id + ')"') + ' style="' + (isUnavailable ? 'opacity:0.7;cursor:not-allowed;' : '') + '">' +
                 '<div class="img-wrap">' +
                     tagHtml +
+                    (isUnavailable ? '<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.7);color:white;padding:8px 16px;border-radius:8px;font-weight:700;font-size:0.9rem;z-index:2;">AGOTADO</span>' : '') +
                     '<img src="' + p.image + '" alt="' + p.name + '" loading="lazy" onerror="this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22%3E%3Crect fill=%22%230d3b33%22 width=%22300%22 height=%22300%22/%3E%3Ctext x=%22150%22 y=%22150%22 text-anchor=%22middle%22 font-family=%22Inter,sans-serif%22 font-size=%2220%22 fill=%22white%22%3E' + encodeURIComponent(p.name) + '%3C/text%3E%3C/svg%3E\'">' +
                 '</div>' +
                 '<div class="info">' +
-                    '<h3 class="product-name">' + p.name + '</h3>' +
+                    '<h3>' + p.name + '</h3>' +
                     (p.detail ? '<span class="detail">' + p.detail + '</span>' : '') +
-                    '<span class="desc product-description">' + p.desc + '</span>' +
-                    priceHtml +
-                    btnHtml +
+                    '<span class="desc">' + p.desc + '</span>' +
+                    '<span class="price">$' + p.price.toLocaleString() + '</span>' +
+                    (isUnavailable ? 
+                        '<button class="btn-detail" style="background:#9ca3af;cursor:not-allowed;">No disponible</button>' :
+                        '<button class="btn-detail">Ver Detalles</button>'
+                    ) +
                 '</div>' +
             '</div>';
         });
@@ -401,14 +389,7 @@ function filterProducts() {
 
 function openProductModal(id) {
     currentProduct = products.find(function(p) { return p.id === id; });
-    if (!currentProduct) return;
-    
-    // No abrir modal para productos agotados
-    if (currentProduct.status === 'unavailable') {
-        showToast('❌ Este producto está agotado');
-        return;
-    }
-    
+    if (!currentProduct || currentProduct.status === 'unavailable') return;
     currentQty = 1;
     document.getElementById('modalTitle').textContent = currentProduct.name;
     var img = document.getElementById('modalImage');
@@ -496,7 +477,7 @@ function enviarAGoogleSheets(telefono, productos, total, peso) {
 }
 
 // ================================================================
-// 8. FUNCIONES DE CONTACTO - NÚMERO ACTUALIZADO
+// 8. FUNCIONES DE CONTACTO
 // ================================================================
 
 function obtenerMensajePedido() {
@@ -549,7 +530,7 @@ function enviarPorWhatsAppConCarrito() {
     var mensaje = obtenerMensajePedido();
     if (!mensaje) return;
     
-    var url = 'https://wa.me/5359731937?text=' + encodeURIComponent(mensaje);
+    var url = 'https://wa.me/5356382909?text=' + encodeURIComponent(mensaje);
     window.open(url, '_blank');
     closeCartModal();
 }
@@ -558,7 +539,7 @@ function enviarPorSMSConCarrito() {
     var mensaje = obtenerMensajePedido();
     if (!mensaje) return;
     
-    var url = 'sms:5359731937?body=' + encodeURIComponent(mensaje);
+    var url = 'sms:5356382909?body=' + encodeURIComponent(mensaje);
     window.open(url, '_blank');
     setTimeout(function() {
         showToast('📱 Si no se abre, copia el mensaje y pégalo en SMS');
@@ -567,7 +548,7 @@ function enviarPorSMSConCarrito() {
 }
 
 function llamarPorTelefono() {
-    var telefono = '5359731937';
+    var telefono = '5356382909';
     var url = 'tel:' + telefono;
     window.open(url, '_blank');
     closeCartModal();
