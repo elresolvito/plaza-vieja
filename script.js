@@ -32,7 +32,7 @@ var products = [
         name: "Chorizo Extra Vela", 
         image: "productos/Chorizo extra vela 1.6 kilos 17000.png", 
         desc: "Chorizo extra vela de alta calidad, sabor intenso y ahumado.", 
-        category: "Embutidos" 
+        category: "Embutidos" ,
         status: "unavailable"  // <-- AGOTADO
     },
     { 
@@ -48,7 +48,7 @@ var products = [
         name: "Jamón Rápido", 
         image: "productos/jamon-rapido-2kg-11000.png", 
         desc: "Jamón rápido, práctico y versátil para el consumo diario.", 
-        category: "Embutidos" 
+        category: "Embutidos", 
         status: "unavailable"  // <-- AGOTADO
     },
     { 
