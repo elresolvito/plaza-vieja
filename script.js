@@ -33,6 +33,7 @@ var products = [
         image: "productos/Chorizo extra vela 1.6 kilos 17000.png", 
         desc: "Chorizo extra vela de alta calidad, sabor intenso y ahumado.", 
         category: "Embutidos" 
+        status: "unavailable"  // <-- AGOTADO
     },
     { 
         id: 102, 
