@@ -114,6 +114,43 @@
         }
         
         /* ============================================
+           BANNER DE ACTUALIZACIÓN
+           ============================================ */
+        #updateBanner {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 14px 24px;
+            border-radius: 12px;
+            z-index: 9999;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            max-width: 90%;
+            text-align: center;
+            animation: fadeInUp 0.5s ease;
+            cursor: pointer;
+            display: none;
+        }
+        #updateBanner.show {
+            display: block;
+        }
+        #updateBanner strong {
+            display: block;
+            font-size: 1rem;
+        }
+        #updateBanner p {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-top: 4px;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        
+        /* ============================================
            MODAL DE SALIDA - SUGERENCIA DE INSTALACIÓN
            ============================================ */
         #exitModal {
@@ -297,7 +334,7 @@
         @media (min-width: 768px) { .menu-btn { display: none; } }
         
         /* ============================================
-           HERO - CON LAS 4 MEJORAS
+           HERO
            ============================================ */
         .hero {
             min-height: 60vh;
@@ -1143,6 +1180,14 @@ INDICADOR DE CACHÉ
 <div id="cacheStatus">📦 Todo en caché</div>
 
 <!-- ============================================
+BANNER DE ACTUALIZACIÓN
+============================================ -->
+<div id="updateBanner" onclick="window.location.reload(true)">
+    <strong>🔄 ¡Nueva versión disponible!</strong>
+    <p>Toca aquí para actualizar</p>
+</div>
+
+<!-- ============================================
 HEADER
 ============================================ -->
 <header id="mainHeader">
@@ -1198,8 +1243,6 @@ MERCADO / PRODUCTOS
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="Buscar productos..." oninput="filterProducts()">
         </div>
-        
-        <!-- CATEGORÍAS RÁPIDAS ELIMINADAS -->
         
         <div class="filters" id="filterContainer">
             <button class="filter-btn active" data-category="all" onclick="filterByCategory('all')">Todos</button>
@@ -1401,10 +1444,11 @@ BOTÓN VOLVER ARRIBA
 </button>
 
 <!-- ============================================
-SCRIPT
+SCRIPT - CARGA CON VERSIÓN AUTOMÁTICA
 ============================================ -->
 <script>
-    const APP_VERSION = 10;
+    // Versión automática basada en la fecha (cambia en cada carga)
+    const APP_VERSION = Date.now();
     document.write('<script src="script.js?v=' + APP_VERSION + '"><\/script>');
 </script>
 
@@ -1421,14 +1465,33 @@ SCRIPT
 
 <script>
 // ================================================================
-// REGISTRO DEL SERVICE WORKER
+// REGISTRO DEL SERVICE WORKER CON ACTUALIZACIÓN AUTOMÁTICA
 // ================================================================
 
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/plaza-vieja/sw.js')
+        // Registrar con la versión actual para forzar actualización
+        navigator.serviceWorker.register('/plaza-vieja/sw.js?_=' + APP_VERSION)
             .then(function(registration) {
-                console.log('✅ Service Worker registrado con éxito:', registration.scope);
+                console.log('✅ Service Worker registrado con éxito');
+                
+                // Verificar si hay una nueva versión al volver a la página
+                if (registration.waiting) {
+                    console.log('🔄 Hay una versión esperando. Forzando actualización...');
+                    registration.waiting.postMessage('skipWaiting');
+                    window.location.reload(true);
+                }
+                
+                // Escuchar cambios en el Service Worker
+                registration.addEventListener('updatefound', function() {
+                    var newWorker = registration.installing;
+                    newWorker.addEventListener('statechange', function() {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            console.log('🔄 Nueva versión instalada. Mostrando banner...');
+                            showUpdateNotification();
+                        }
+                    });
+                });
             })
             .catch(function(error) {
                 console.log('❌ Error al registrar Service Worker:', error);
@@ -1446,7 +1509,60 @@ if (window.matchMedia('(display-mode: standalone)').matches) {
 }
 
 // ================================================================
-// MODAL DE SALIDA
+// DETECCIÓN DE ACTUALIZACIONES EN LA APP INSTALADA
+// ================================================================
+
+// Guardar la versión en localStorage
+localStorage.setItem('plazaVersion', APP_VERSION);
+
+// Verificar si hay una nueva versión cada 30 segundos
+setInterval(function() {
+    // Solicitar al Service Worker que verifique actualizaciones
+    if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage('checkForUpdate');
+    }
+}, 30000);
+
+// Detectar mensajes del Service Worker
+if (navigator.serviceWorker) {
+    navigator.serviceWorker.addEventListener('message', function(event) {
+        if (event.data === 'newVersionAvailable') {
+            console.log('🔄 Nueva versión disponible. Mostrando banner...');
+            showUpdateNotification();
+        }
+    });
+}
+
+// Función para mostrar notificación de actualización
+function showUpdateNotification() {
+    var banner = document.getElementById('updateBanner');
+    if (banner) {
+        banner.classList.add('show');
+        // Ocultar después de 30 segundos
+        setTimeout(function() {
+            banner.classList.remove('show');
+        }, 30000);
+    }
+}
+
+// Detectar cuando la app vuelve a estar visible (después de estar en segundo plano)
+document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'visible') {
+        console.log('📱 App visible. Verificando actualizaciones...');
+        // Verificar si hay cambios en el script
+        fetch('script.js?_=' + Date.now(), { cache: 'reload' })
+            .then(function(response) {
+                if (!response.ok) return;
+                console.log('✅ Contenido verificado');
+            })
+            .catch(function() {
+                console.log('⚠️ No se pudo verificar');
+            });
+    }
+});
+
+// ================================================================
+// MODAL DE SALIDA - SUGERENCIA DE INSTALACIÓN
 // ================================================================
 
 var exitModal = document.getElementById('exitModal');
