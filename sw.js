@@ -1,8 +1,9 @@
 // ================================================================
-// SERVICE WORKER - PLAZA VIEJA (CON ACTUALIZACIÓN AUTOMÁTICA)
+// SERVICE WORKER - PLAZA VIEJA (CON ACTUALIZACIÓN FORZADA)
 // ================================================================
 
-const CACHE_NAME = 'plaza-vieja-v12';
+const CACHE_NAME = 'plaza-vieja-v' + Date.now(); // <-- CACHE SIEMPRE NUEVA
+
 const urlsToCache = [
     '/plaza-vieja/',
     '/plaza-vieja/index.html',
@@ -18,34 +19,20 @@ const urlsToCache = [
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
 ];
 
-const productImages = [
-    'productos/chorizo-extra-1.6kg-17000.png',
-    'productos/jamon-serrano-5lb-49000.png',
-    'productos/jamon-rapido-2kg-10000.png',
-    'productos/jamon-barra-2kg-10000.png',
-    'productos/beicon-laminado-1kg-9000.png',
-    'productos/beicon-laminado-2kg-17000.png',
-    'productos/beicon-troceado-3kg-17000.png',
-    'productos/beicon-molde-5kg-29000.png',
-    'productos/gouda-aleman-3.1kg-20500.png',
-    'productos/gouda-holandes-3.1kg-21500.png',
-    'productos/queso-azul-3kg-31000.png',
-    'productos/queso-cabra-miel-3.5kg-25000.png'
-];
-
-const allUrlsToCache = urlsToCache.concat(productImages);
-
+// ================================================================
 // INSTALACIÓN
+// ================================================================
+
 self.addEventListener('install', function(event) {
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(function(cache) {
                 console.log('📦 Cacheando recursos...');
-                return cache.addAll(allUrlsToCache);
+                return cache.addAll(urlsToCache);
             })
             .then(function() {
-                console.log('✅ Cache completado');
-                return self.skipWaiting();
+                console.log('✅ Cache completado. Versión:', CACHE_NAME);
+                return self.skipWaiting(); // <-- ACTIVAR INMEDIATAMENTE
             })
             .catch(function(error) {
                 console.log('⚠️ Error al cachear:', error);
@@ -53,35 +40,47 @@ self.addEventListener('install', function(event) {
     );
 });
 
-// ACTIVACIÓN - Limpiar caches viejos
+// ================================================================
+// ACTIVACIÓN - LIMPIAR CACHÉS VIEJOS Y FORZAR ACTUALIZACIÓN
+// ================================================================
+
 self.addEventListener('activate', function(event) {
     event.waitUntil(
         caches.keys().then(function(cacheNames) {
             return Promise.all(
                 cacheNames.map(function(cacheName) {
+                    // Eliminar todas las cachés que no sean la actual
                     if (cacheName !== CACHE_NAME) {
-                        console.log('🗑️ Eliminando cache:', cacheName);
+                        console.log('🗑️ Eliminando cache viejo:', cacheName);
                         return caches.delete(cacheName);
                     }
                 })
             );
         }).then(function() {
-            console.log('✅ Service Worker activado');
+            console.log('✅ Cache limpiado. Versión activa:', CACHE_NAME);
+            // Forzar que el Service Worker tome el control de todas las pestañas
             return self.clients.claim();
         })
     );
 });
 
-// FETCH - Ignorando extensiones de Chrome
+// ================================================================
+// FETCH - Buscar en caché primero, pero actualizar en segundo plano
+// ================================================================
+
 self.addEventListener('fetch', function(event) {
-    if (event.request.url.startsWith('chrome-extension://')) {
-        return;
-    }
-    
     event.respondWith(
         caches.match(event.request)
             .then(function(response) {
                 if (response) {
+                    // Si está en caché, devolverlo y actualizar en segundo plano
+                    fetch(event.request).then(function(networkResponse) {
+                        if (networkResponse && networkResponse.status === 200) {
+                            caches.open(CACHE_NAME).then(function(cache) {
+                                cache.put(event.request, networkResponse);
+                            });
+                        }
+                    }).catch(function() {});
                     return response;
                 }
                 
@@ -91,12 +90,9 @@ self.addEventListener('fetch', function(event) {
                     }
                     
                     var responseToCache = response.clone();
-                    caches.open(CACHE_NAME)
-                        .then(function(cache) {
-                            try {
-                                cache.put(event.request, responseToCache);
-                            } catch (e) {}
-                        });
+                    caches.open(CACHE_NAME).then(function(cache) {
+                        cache.put(event.request, responseToCache);
+                    });
                     
                     return response;
                 }).catch(function() {
@@ -109,9 +105,25 @@ self.addEventListener('fetch', function(event) {
     );
 });
 
-// ACTUALIZACIÓN AUTOMÁTICA
+// ================================================================
+// DETECTAR CAMBIOS Y NOTIFICAR A LA PÁGINA
+// ================================================================
+
 self.addEventListener('message', function(event) {
-    if (event.data === 'skipWaiting') {
-        self.skipWaiting();
+    if (event.data === 'checkForUpdate') {
+        // Verificar si hay una nueva versión
+        caches.keys().then(function(cacheNames) {
+            var latestCache = cacheNames.sort().reverse()[0];
+            if (latestCache !== CACHE_NAME) {
+                console.log('🔄 Nueva versión disponible:', latestCache);
+                self.skipWaiting();
+                // Notificar a la página que hay una actualización
+                self.clients.matchAll().then(function(clients) {
+                    clients.forEach(function(client) {
+                        client.postMessage('newVersionAvailable');
+                    });
+                });
+            }
+        });
     }
 });
