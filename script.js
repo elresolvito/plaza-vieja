@@ -1,5 +1,5 @@
 // ================================================================
-// PLAZA VIEJA - SCRIPT COMPLETO
+// PLAZA VIEJA - SCRIPT COMPLETO (SIN MOSTRAR PRECIOS)
 // ================================================================
 
 // ================================================================
@@ -235,7 +235,8 @@ function updateUI() {
     var badge = document.getElementById('cartBadge');
     var floatTotal = document.getElementById('cartFloatTotal');
     if (badge) badge.textContent = count;
-    if (floatTotal) floatTotal.textContent = '$' + total.toLocaleString();
+    // Ocultar el total del carrito flotante
+    if (floatTotal) floatTotal.textContent = '';
     
     var container = document.getElementById('cartItems');
     var sendWhatsAppBtn = document.getElementById('sendWhatsAppBtn');
@@ -248,13 +249,13 @@ function updateUI() {
         container.innerHTML = '<p style="text-align:center;color:var(--text-medium);">Tu carrito está vacío</p>';
         if (sendWhatsAppBtn) sendWhatsAppBtn.disabled = true;
         if (sendSmsBtn) sendSmsBtn.disabled = true;
-        if (totalDisplay) totalDisplay.textContent = 'Total: $0';
+        if (totalDisplay) totalDisplay.textContent = '';
         return;
     }
     
     container.innerHTML = cart.map(function(item, i) {
         return '<div class="cart-item">' +
-            '<div><strong>' + item.name + '</strong><br><span style="font-size:0.8125rem;color:var(--text-medium);">$' + item.price.toLocaleString() + ' c/u</span></div>' +
+            '<div><strong>' + item.name + '</strong></div>' +
             '<div class="item-controls">' +
                 '<button class="minus" onclick="updateQty(' + i + ', ' + (item.quantity - 1) + ')">−</button>' +
                 '<span style="font-weight:700;min-width:24px;text-align:center;">' + item.quantity + '</span>' +
@@ -264,7 +265,7 @@ function updateUI() {
         '</div>';
     }).join('');
     
-    if (totalDisplay) totalDisplay.textContent = 'Total: $' + total.toLocaleString();
+    if (totalDisplay) totalDisplay.textContent = '';
     if (sendWhatsAppBtn) sendWhatsAppBtn.disabled = false;
     if (sendSmsBtn) sendSmsBtn.disabled = false;
 }
@@ -330,7 +331,6 @@ function renderProducts() {
                     '<h3>' + p.name + '</h3>' +
                     (p.detail ? '<span class="detail">' + p.detail + '</span>' : '') +
                     '<span class="desc">' + p.desc + '</span>' +
-                    '<span class="price">$' + p.price.toLocaleString() + '</span>' +
                     (isUnavailable ? 
                         '<button class="btn-detail" style="background:#9ca3af;cursor:not-allowed;">No disponible</button>' :
                         '<button class="btn-detail">Ver Detalles</button>'
@@ -400,7 +400,8 @@ function openProductModal(id) {
         this.src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22%3E%3Crect fill=%22%230d3b33%22 width=%22300%22 height=%22300%22/%3E%3Ctext x=%22150%22 y=%22150%22 text-anchor=%22middle%22 font-family=%22Inter,sans-serif%22 font-size=%2224%22 fill=%22white%22%3E' + encodeURIComponent(currentProduct.name) + '%3C/text%3E%3C/svg%3E';
     };
     document.getElementById('modalDesc').textContent = currentProduct.desc;
-    updateModalPrice();
+    // Ocultar el precio en el modal
+    document.getElementById('modalPrice').textContent = '';
     document.getElementById('modalQty').textContent = '1';
     document.getElementById('productModal').classList.add('show');
 }
@@ -412,13 +413,13 @@ function closeProductModal() {
 function changeQty(delta) {
     currentQty = Math.max(1, currentQty + delta);
     document.getElementById('modalQty').textContent = currentQty;
-    updateModalPrice();
+    // Ya no se actualiza el precio
 }
 
 function updateModalPrice() {
+    // Función mantenida por compatibilidad, pero sin mostrar precio
     if (currentProduct) {
-        var total = currentProduct.price * currentQty;
-        document.getElementById('modalPrice').textContent = '$' + total.toLocaleString();
+        document.getElementById('modalPrice').textContent = '';
     }
 }
 
@@ -514,9 +515,8 @@ function obtenerMensajePedido() {
     mensaje += '📅 ' + fecha + '\n\n';
     mensaje += '📋 *PRODUCTOS:*\n';
     cart.forEach(function(item) {
-        mensaje += '  • ' + item.name + ' × ' + item.quantity + ' = $' + (item.price * item.quantity).toLocaleString() + '\n';
+        mensaje += '  • ' + item.name + ' × ' + item.quantity + '\n';
     });
-    mensaje += '\n💰 *Total: $' + total.toLocaleString() + ' CUP*';
     mensaje += '\n📦 *Peso aprox: ' + pesoTotal.toFixed(1) + ' kg*';
     mensaje += '\n\n--- *DATOS DEL CLIENTE* ---';
     mensaje += '\n📍 *Dirección:* (Confirma)';
