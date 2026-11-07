@@ -5,7 +5,8 @@ on:
     branches:
       - main 
     paths:
-      - 'productos/**' 
+      - 'productos/**'
+  workflow_dispatch: # Permite ejecutarlo a mano cuando quieras
 
 jobs:
   compress:
