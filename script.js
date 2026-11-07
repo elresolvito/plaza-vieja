@@ -145,6 +145,16 @@ var products = [
         desc: "Salmón ahumado de alta calidad, ideal para entradas y platos gourmet.", 
         category: "Pescados", 
         tag: "nuevo" 
+    },
+
+    // === VÍVERES / VARIOS ===
+    { 
+        id: 501, 
+        name: "Pan Rallado Onema 500g", 
+        image: "productos/Pan rallado onema 500 g 600 pesos .webp", 
+        desc: "Pan rallado Onema de 500 g, ideal para empanar y rebozar.", 
+        category: "Víveres", 
+        tag: "nuevo" 
     }
 ];
 
@@ -461,191 +471,4 @@ function enviarAGoogleSheets(telefono, productos, total, peso) {
         },
         body: JSON.stringify(data)
     })
-    .then(function(response) {
-        if (!response.ok) {
-            throw new Error('Error en la respuesta del servidor: ' + response.status);
-        }
-        return response.json();
-    })
-    .then(function(result) {
-        if (result.success) {
-            console.log('✅ Pedido enviado a Google Sheets:', result.message);
-        } else {
-            console.warn('⚠️ Error al enviar a Google Sheets:', result.message);
-        }
-    })
-    .catch(function(error) {
-        console.warn('⚠️ Error al enviar a Google Sheets:', error);
-    });
-}
-
-// ================================================================
-// 8. FUNCIONES DE CONTACTO
-// ================================================================
-
-function obtenerMensajePedido() {
-    if (cart.length === 0) {
-        return null;
-    }
-
-    var telefonoInput = document.getElementById('clienteTelefono');
-    var telefonoCliente = telefonoInput ? telefonoInput.value.trim() : '';
-    
-    if (!telefonoCliente || telefonoCliente.length < 8) {
-        showToast('⚠️ Ingresa tu número de teléfono para continuar');
-        if (telefonoInput) telefonoInput.focus();
-        return null;
-    }
-
-    var total = getTotal();
-    var pesoTotal = cart.reduce(function(s, i) {
-        return s + (i.weight || 0.5) * i.quantity;
-    }, 0);
-
-    var listaProductos = cart.map(function(item) {
-        return item.name + ' x' + item.quantity;
-    }).join(', ');
-    
-    enviarAGoogleSheets(telefonoCliente, listaProductos, total.toFixed(2), pesoTotal.toFixed(1));
-
-    var numeroPedido = Math.floor(1000 + Math.random() * 9000);
-    var fecha = new Date().toLocaleString('es-CU');
-
-    var mensaje = '🛒 *NUEVO PEDIDO #' + numeroPedido + '*\n';
-    mensaje += '📅 ' + fecha + '\n\n';
-    mensaje += '📋 *PRODUCTOS:*\n';
-    cart.forEach(function(item) {
-        mensaje += '  • ' + item.name + ' × ' + item.quantity + '\n';
-    });
-    mensaje += '\n📦 *Peso aprox: ' + pesoTotal.toFixed(1) + ' kg*';
-    mensaje += '\n\n--- *DATOS DEL CLIENTE* ---';
-    mensaje += '\n📍 *Dirección:* (Confirma)';
-    mensaje += '\n📞 *Teléfono:* ' + telefonoCliente;
-    mensaje += '\n💳 *Pago:* (Efectivo / Transferencia)';
-    mensaje += '\n\n⏰ *Entregamos en el día (9am - 8pm)*';
-    mensaje += '\n\n✅ *¡Gracias por tu compra!*';
-
-    return mensaje;
-}
-
-function enviarPorWhatsAppConCarrito() {
-    var mensaje = obtenerMensajePedido();
-    if (!mensaje) return;
-    
-    var url = 'https://wa.me/5356382909?text=' + encodeURIComponent(mensaje);
-    window.open(url, '_blank');
-    closeCartModal();
-}
-
-function enviarPorSMSConCarrito() {
-    var mensaje = obtenerMensajePedido();
-    if (!mensaje) return;
-    
-    var url = 'sms:5356382909?body=' + encodeURIComponent(mensaje);
-    window.open(url, '_blank');
-    setTimeout(function() {
-        showToast('📱 Si no se abre, copia el mensaje y pégalo en SMS');
-    }, 1000);
-    closeCartModal();
-}
-
-function llamarPorTelefono() {
-    var telefono = '5356382909';
-    var url = 'tel:' + telefono;
-    window.open(url, '_blank');
-    closeCartModal();
-}
-
-// ================================================================
-// 9. TOAST Y ANIMACIONES
-// ================================================================
-
-var toastTimeout;
-
-function showToast(msg) {
-    var el = document.getElementById('toast');
-    var msgEl = document.getElementById('toastMsg');
-    if (!el || !msgEl) return;
-    msgEl.textContent = msg;
-    el.classList.add('show');
-    clearTimeout(toastTimeout);
-    toastTimeout = setTimeout(function() { el.classList.remove('show'); }, 2500);
-}
-
-function shakeCart() {
-    var btn = document.getElementById('cartFloat');
-    if (!btn) return;
-    btn.classList.remove('shake');
-    void btn.offsetWidth;
-    btn.classList.add('shake');
-}
-
-// ================================================================
-// 10. DETECCIÓN DE CAMBIOS
-// ================================================================
-
-function checkForUpdates() {
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.ready.then(function(registration) {
-            setInterval(function() {
-                registration.update();
-                console.log('🔄 Buscando actualizaciones...');
-            }, 5 * 60 * 1000);
-        });
-    }
-}
-
-document.addEventListener('visibilitychange', function() {
-    if (document.visibilityState === 'visible') {
-        checkForUpdates();
-    }
-});
-
-// ================================================================
-// 11. INICIALIZACIÓN
-// ================================================================
-
-document.addEventListener('DOMContentLoaded', function() {
-    var cats = ['all'];
-    products.forEach(function(p) {
-        if (cats.indexOf(p.category) === -1) cats.push(p.category);
-    });
-    var container = document.getElementById('filterContainer');
-    if (container) {
-        container.innerHTML = cats.map(function(c) {
-            return '<button class="filter-btn' + (c === 'all' ? ' active' : '') + '" data-category="' + c + '" onclick="filterByCategory(\'' + c + '\')">' + (c === 'all' ? 'Todos' : c) + '</button>';
-        }).join('');
-    }
-    
-    renderQuickCategories();
-    
-    setTimeout(function() {
-        renderProducts();
-    }, 300);
-    
-    updateUI();
-    
-    document.querySelectorAll('.modal-overlay').forEach(function(m) {
-        m.addEventListener('click', function(e) {
-            if (e.target === this) this.classList.remove('show');
-        });
-    });
-    
-    var header = document.getElementById('mainHeader');
-    window.addEventListener('scroll', function() {
-        if (header) header.classList.toggle('scrolled', window.scrollY > 80);
-    });
-    
-    if ('IntersectionObserver' in window) {
-        var observer = new IntersectionObserver(function(entries) {
-            entries.forEach(function(e) {
-                if (e.isIntersecting) e.target.classList.add('visible');
-            });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.fade-in').forEach(function(el) {
-            observer.observe(el);
-        });
-    }
-    
-    setTimeout(checkForUpdates, 5000);
-});
+    .then(function
