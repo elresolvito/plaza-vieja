@@ -3,9 +3,9 @@ name: Comprimir Imágenes Automáticamente
 on:
   push:
     branches:
-      - main # O el nombre de tu rama principal (master)
+      - main 
     paths:
-      - 'assets/**' # Cambia esto por la ruta exacta donde guardas tus imágenes (ej. img/** o images/**)
+      - 'productos/**' 
 
 jobs:
   compress:
